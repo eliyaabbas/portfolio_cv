@@ -1,0 +1,31 @@
+---
+---
+<nav class="navbar" id="navbar">
+  <div class="nav-inner">
+    <a href="#" class="nav-logo">
+      <img src="/logo.png" alt="Eliya Abbas Logo" height="32" style="border-radius: 6px;" />
+    </a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#about">About</a></li>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#education">Education</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger" aria-label="Toggle navigation menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<style>
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    transition: var(--transition);
+  }
+  .nav-logo:hover {
+    transform: scale(1.05);
+  }
+</style>

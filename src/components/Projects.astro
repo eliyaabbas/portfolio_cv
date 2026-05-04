@@ -1,0 +1,81 @@
+---
+import { Icon } from 'astro-icon/components';
+
+const projects = [
+  {
+    title: "DeFi Credit Scoring Model",
+    desc: "ML pipeline assigning 0–1000 credit scores to Aave V2 wallets using unsupervised KMeans clustering on raw DeFi transaction data.",
+    tech: ["Python", "Scikit-learn", "KMeans", "Pandas", "DeFi"],
+    link: "https://github.com/eliyaabbas/DeFi_Credit_Coring_Model",
+    icon: "lucide:landmark"
+  },
+  {
+    title: "Live Restaurant Menu Platform",
+    desc: "QR-based digital restaurant menu system with authentication, admin dashboard, and real-time menu management.",
+    tech: ["JavaScript", "Node.js", "MongoDB", "REST API"],
+    link: "https://github.com/eliyaabbas/LiveRestaurantMenu",
+    icon: "lucide:utensils-crossed"
+  },
+  {
+    title: "Movie Recommender System",
+    desc: "Content-based recommendation engine built during SkyBricks internship, using collaborative filtering and NLP-based feature extraction.",
+    tech: ["Python", "Scikit-learn", "NLP", "Jupyter"],
+    link: "https://github.com/eliyaabbas/SkyBricks-Project4-Movie-Recommender",
+    icon: "lucide:film"
+  },
+  {
+    title: "Business Intelligence Dashboards",
+    desc: "Analytical dashboards and BI projects built with Excel, Power BI, and Python for data-driven decision making.",
+    tech: ["Power BI", "Excel", "Python", "SQL"],
+    link: "https://github.com/eliyaabbas/Internshala_BI_Projects",
+    icon: "lucide:pie-chart"
+  },
+  {
+    title: "Risk Scoring Model",
+    desc: "Statistical risk assessment model using Python for scoring and evaluating financial/behavioral risk factors.",
+    tech: ["Python", "Pandas", "Statistics", "Jupyter"],
+    link: "https://github.com/eliyaabbas/Risk_Score",
+    icon: "lucide:alert-triangle"
+  },
+  {
+    title: "Employee Attrition Predictor",
+    desc: "Predictive ML model to identify employees at risk of attrition using classification algorithms and HR data analysis.",
+    tech: ["Python", "ML", "Classification", "Pandas"],
+    link: "https://github.com/eliyaabbas/Predictive-Employee-Attrition-Model",
+    icon: "lucide:users"
+  },
+  {
+    title: "Titanic Survival Prediction",
+    desc: "Classic ML classification project predicting passenger survival using feature engineering and supervised learning.",
+    tech: ["Python", "Scikit-learn", "EDA", "Classification"],
+    link: "https://github.com/eliyaabbas/TitanicSurvivalPrediction",
+    icon: "lucide:ship"
+  }
+];
+---
+<section class="section" id="projects">
+  <div class="section-inner">
+    <span class="section-label">My Work</span>
+    <h2 class="section-title reveal">Featured Projects</h2>
+    <p class="section-desc reveal">A curated selection of projects showcasing my technical breadth.</p>
+    <div class="projects-grid">
+      {projects.map((project) => (
+        <div class="project-card reveal">
+          <div class="project-header">
+            <div class="project-icon">
+              <Icon name={project.icon} size={24} />
+            </div>
+            <div class="project-links">
+              <a href={project.link} target="_blank" title="GitHub"><Icon name="lucide:external-link" size={20} /></a>
+            </div>
+          </div>
+          <h3>{project.title}</h3>
+          <p>{project.desc}</p>
+          <div class="project-tech">
+            {project.tech.map((t) => <span>{t}</span>)}
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

@@ -1,0 +1,111 @@
+---
+import { Icon } from 'astro-icon/components';
+---
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <a href="#" class="nav-logo">
+        <img src="/logo.png" alt="EA Logo" height="40" />
+      </a>
+      <p>Building intelligent, data-driven solutions with AI & modern tech.</p>
+    </div>
+    
+    <div class="footer-nav">
+      <h4>Navigation</h4>
+      <ul>
+        <li><a href="#about">About</a></li>
+        <li><a href="#experience">Experience</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#contact">Contact</a></li>
+        <li><a href="/Profile.pdf" target="_blank">Download Resume</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-social">
+      <h4>Connect</h4>
+      <div class="footer-links">
+        <a href="https://github.com/eliyaabbas" target="_blank" title="GitHub"><Icon name="simple-icons:github" size={20} /></a>
+        <a href="https://www.linkedin.com/in/eliyaa" target="_blank" title="LinkedIn"><Icon name="simple-icons:linkedin" size={20} /></a>
+        <a href="mailto:eliyaasayyed@gmail.com" title="Email"><Icon name="lucide:mail" size={20} /></a>
+      </div>
+    </div>
+  </div>
+  
+  <div class="footer-bottom">
+    <p>© 2025 Eliya Abbas Sayyed. Designed & Built with <Icon name="lucide:zap" size={14} style="display:inline; vertical-align: middle; color: var(--accent-cyan);" /> and AI.</p>
+  </div>
+</footer>
+
+<style>
+  .footer-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 3rem;
+    padding: 4rem 2rem;
+    text-align: left;
+  }
+  .footer-brand .nav-logo {
+    display: inline-block;
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+    text-decoration: none;
+  }
+  .footer-brand p {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    max-width: 240px;
+    line-height: 1.6;
+  }
+  .footer-nav h4, .footer-social h4 {
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 1.2rem;
+    color: var(--text-primary);
+  }
+  .footer-nav ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+  .footer-nav a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 0.88rem;
+    transition: var(--transition);
+  }
+  .footer-nav a:hover {
+    color: var(--accent-cyan);
+  }
+  .footer-social .footer-links {
+    justify-content: flex-start;
+    margin-bottom: 0;
+  }
+  .footer-bottom {
+    padding: 2rem;
+    border-top: 1px solid var(--border);
+    text-align: center;
+  }
+  .footer-bottom p {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+  }
+  @media (max-width: 768px) {
+    .footer-inner {
+      grid-template-columns: 1fr;
+      text-align: center;
+      gap: 2.5rem;
+      padding: 3rem 1.5rem;
+    }
+    .footer-brand p {
+      margin: 0 auto;
+    }
+    .footer-social .footer-links {
+      justify-content: center;
+    }
+  }
+</style>
