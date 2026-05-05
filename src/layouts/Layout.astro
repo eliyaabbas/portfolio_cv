@@ -8,12 +8,12 @@ interface Props {
 }
 
 const { 
-  title, 
-  description = "Portfolio of Eliya Abbas — Software Engineer, Data Analyst & Full Stack Developer. Specializing in Python, React, Node.js, and AI/ML solutions.",
+  title = "Eliya Abbas Sayyed | AI Solutions Architect & Data Analytics Expert", 
+  description = "Portfolio of Eliya Abbas Sayyed — AI Solutions Architect specializing in Agentic AI, RAG, and Machine Learning. Expert in Decision Intelligence and Big Data Analytics at Innoviscent LPP.",
   image = "/logo.png"
 } = Astro.props;
 
-const canonicalURL = new URL(Astro.url.pathname, "https://eliyaabbas.com"); // Adjust domain if known
+const canonicalURL = new URL(Astro.url.pathname, "https://eliyaabbas.com");
 
 const schema = {
   "@context": "https://schema.org",
@@ -21,16 +21,30 @@ const schema = {
   "name": "Eliya Abbas Sayyed",
   "url": "https://eliyaabbas.com",
   "image": "https://eliyaabbas.com/avatar.png",
+  "jobTitle": "AI Solutions Architect & Software Engineer",
+  "description": "Specializing in Agentic Workflows, Retrieval-Augmented Generation (RAG), and Decision Intelligence. Building end-to-end production AI pipelines.",
+  "worksFor": {
+    "@type": "Organization",
+    "name": "Innoviscent LPP",
+    "url": "https://innoviscent.com"
+  },
+  "knowsAbout": [
+    "Artificial Intelligence",
+    "Machine Learning",
+    "Generative AI",
+    "Agentic Workflows",
+    "RAG (Retrieval-Augmented Generation)",
+    "Data Analytics",
+    "Decision Intelligence",
+    "Python",
+    "React",
+    "Node.js",
+    "Business Intelligence"
+  ],
   "sameAs": [
     "https://github.com/eliyaabbas",
     "https://www.linkedin.com/in/eliyaa"
-  ],
-  "jobTitle": "Full Stack Developer",
-  "worksFor": {
-    "@type": "Organization",
-    "name": "Innoviscent LPP"
-  },
-  "description": description
+  ]
 };
 ---
 
@@ -46,13 +60,13 @@ const schema = {
         <!-- SEO Metadata -->
 		<title>{title}</title>
 		<meta name="description" content={description} />
-		<meta name="keywords" content="Eliya Abbas, Software Engineer, Data Analyst, Full Stack Developer, Python, React, Node.js, AI, ML, Portfolio, Innoviscent" />
+		<meta name="keywords" content="Eliya Abbas Sayyed, AI Solutions Architect, Machine Learning Engineer, Data Analytics Expert, Agentic AI, RAG, GenAI, Decision Intelligence, Software Engineer Mumbai, Innoviscent LPP, Intelihuman.com, The SkyBrisk, Codsoft, Python AI Developer, LLM Integration" />
 		<link rel="canonical" href={canonicalURL} />
 
         <!-- Open Graph / Facebook -->
 		<meta property="og:title" content={title} />
 		<meta property="og:description" content={description} />
-		<meta property="og:type" content="website" />
+		<meta property="og:type" content="profile" />
 		<meta property="og:url" content={canonicalURL} />
 		<meta property="og:image" content={new URL(image, canonicalURL)} />
 

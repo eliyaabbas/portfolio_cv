@@ -68,7 +68,7 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 // ===== TYPING EFFECT =====
 const typingEl = document.querySelector('.typing-text');
 if (typingEl) {
-  const roles = ['Software Engineer', 'Data Analyst', 'Full Stack Developer', 'AI Enthusiast'];
+  const roles = ['Software Engineer', 'Data Analyst', 'AI Solutions Architect', 'ML Engineer'];
   let roleIndex = 0;
   let charIndex = 0;
   let isDeleting = false;
