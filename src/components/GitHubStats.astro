@@ -1,0 +1,195 @@
+---
+import { Icon } from 'astro-icon/components';
+
+const GITHUB_USERNAME = "eliyaabbas";
+let profile = null;
+
+try {
+  const response = await fetch(`https://api.github.com/users/${GITHUB_USERNAME}`);
+  if (response.ok) {
+    profile = await response.json();
+  }
+} catch (e) {
+  console.error("Failed to fetch GitHub profile:", e);
+}
+
+const stats = profile ? [
+  { label: "Public Repos", value: profile.public_repos, icon: "lucide:folder-git-2" },
+  { label: "Followers", value: profile.followers, icon: "lucide:users" },
+  { label: "Following", value: profile.following, icon: "lucide:user-plus" },
+  { label: "Gists", value: profile.public_gists, icon: "lucide:file-code" },
+] : [];
+---
+
+{profile && (
+  <section class="section github-stats-section">
+    <div class="section-inner">
+      <span class="section-label">Open Source</span>
+      <h2 class="section-title reveal">GitHub Activity</h2>
+      <p class="section-desc reveal">Real-time stats from my GitHub profile.</p>
+      
+      <div class="stats-grid">
+        {stats.map(stat => (
+          <div class="stat-card reveal">
+            <div class="stat-icon">
+              <Icon name={stat.icon} size={24} />
+            </div>
+            <div class="stat-info">
+              <span class="stat-value counter" data-count={stat.value}>{stat.value}</span>
+              <span class="stat-label-text">{stat.label}</span>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div class="github-profile-card reveal">
+        <div class="profile-header">
+          <img src={profile.avatar_url} alt={profile.name} class="profile-avatar" />
+          <div class="profile-info">
+            <h3>{profile.name}</h3>
+            <p>@{profile.login}</p>
+          </div>
+          <a href={profile.html_url} target="_blank" class="btn btn-primary btn-sm">
+            <Icon name="simple-icons:github" size={16} /> Follow
+          </a>
+        </div>
+        <p class="profile-bio">{profile.bio}</p>
+        <div class="profile-meta">
+          {profile.location && (
+            <span class="meta-item">
+              <Icon name="lucide:map-pin" size={14} /> {profile.location}
+            </span>
+          )}
+          {profile.blog && (
+            <a href={profile.blog} target="_blank" class="meta-item">
+              <Icon name="lucide:link" size={14} /> Website
+            </a>
+          )}
+          <span class="meta-item">
+            <Icon name="lucide:calendar" size={14} /> Joined {new Date(profile.created_at).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}
+          </span>
+        </div>
+      </div>
+    </div>
+  </section>
+)}
+
+<style>
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+  }
+  .stat-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    transition: var(--transition);
+  }
+  .stat-card:hover {
+    border-color: var(--accent-cyan);
+    transform: translateY(-4px);
+  }
+  .stat-icon {
+    color: var(--accent-cyan);
+    background: rgba(0, 212, 255, 0.1);
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+  }
+  .stat-info {
+    display: flex;
+    flex-direction: column;
+  }
+  .stat-value {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--text-primary);
+  }
+  .stat-label-text {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .github-profile-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 2rem;
+    max-width: 800px;
+    margin: 0 auto;
+    position: relative;
+    overflow: hidden;
+  }
+  .github-profile-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; height: 4px;
+    background: var(--gradient-hero);
+  }
+  .profile-header {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+  }
+  .profile-avatar {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    border: 2px solid var(--accent-purple);
+  }
+  .profile-info h3 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 2px;
+  }
+  .profile-info p {
+    color: var(--accent-cyan);
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+  .btn-sm {
+    padding: 8px 16px;
+    font-size: 0.8rem;
+    margin-left: auto;
+  }
+  .profile-bio {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+  }
+  .profile-meta {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+  }
+  .meta-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: var(--transition);
+  }
+  .meta-item:hover {
+    color: var(--text-primary);
+  }
+
+  @media (max-width: 600px) {
+    .btn-sm { margin-left: 0; width: 100%; justify-content: center; }
+  }
+</style>

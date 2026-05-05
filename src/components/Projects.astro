@@ -1,63 +1,104 @@
 ---
 import { Icon } from 'astro-icon/components';
 
-const projects = [
+// Static project data with repo names for matching
+const featuredProjects = [
   {
+    repo: "DeFi_Credit_Coring_Model",
     title: "DeFi Credit Scoring Model",
     desc: "ML pipeline assigning 0–1000 credit scores to Aave V2 wallets using unsupervised KMeans clustering on raw DeFi transaction data.",
     tech: ["Python", "Scikit-learn", "KMeans", "Pandas", "DeFi"],
-    link: "https://github.com/eliyaabbas/DeFi_Credit_Coring_Model",
     icon: "lucide:landmark"
   },
   {
+    repo: "LiveRestaurantMenu",
     title: "Live Restaurant Menu Platform",
     desc: "QR-based digital restaurant menu system with authentication, admin dashboard, and real-time menu management.",
     tech: ["JavaScript", "Node.js", "MongoDB", "REST API"],
-    link: "https://github.com/eliyaabbas/LiveRestaurantMenu",
     icon: "lucide:utensils-crossed"
   },
   {
+    repo: "SkyBricks-Project4-Movie-Recommender",
     title: "Movie Recommender System",
     desc: "Content-based recommendation engine built during SkyBricks internship, using collaborative filtering and NLP-based feature extraction.",
     tech: ["Python", "Scikit-learn", "NLP", "Jupyter"],
-    link: "https://github.com/eliyaabbas/SkyBricks-Project4-Movie-Recommender",
     icon: "lucide:film"
   },
   {
+    repo: "Internshala_BI_Projects",
     title: "Business Intelligence Dashboards",
     desc: "Analytical dashboards and BI projects built with Excel, Power BI, and Python for data-driven decision making.",
     tech: ["Power BI", "Excel", "Python", "SQL"],
-    link: "https://github.com/eliyaabbas/Internshala_BI_Projects",
     icon: "lucide:pie-chart"
   },
   {
+    repo: "Risk_Score",
     title: "Risk Scoring Model",
     desc: "Statistical risk assessment model using Python for scoring and evaluating financial/behavioral risk factors.",
     tech: ["Python", "Pandas", "Statistics", "Jupyter"],
-    link: "https://github.com/eliyaabbas/Risk_Score",
     icon: "lucide:alert-triangle"
   },
   {
+    repo: "Predictive-Employee-Attrition-Model",
     title: "Employee Attrition Predictor",
     desc: "Predictive ML model to identify employees at risk of attrition using classification algorithms and HR data analysis.",
     tech: ["Python", "ML", "Classification", "Pandas"],
-    link: "https://github.com/eliyaabbas/Predictive-Employee-Attrition-Model",
     icon: "lucide:users"
   },
   {
+    repo: "TitanicSurvivalPrediction",
     title: "Titanic Survival Prediction",
     desc: "Classic ML classification project predicting passenger survival using feature engineering and supervised learning.",
     tech: ["Python", "Scikit-learn", "EDA", "Classification"],
-    link: "https://github.com/eliyaabbas/TitanicSurvivalPrediction",
     icon: "lucide:ship"
+  },
+  {
+    repo: "PortfolioAI",
+    title: "Portfolio AI Assistant",
+    desc: "An AI-powered assistant integration for portfolio interaction and codebase intelligence.",
+    tech: ["JavaScript", "AI", "NLP", "LLM"],
+    icon: "lucide:bot"
   }
 ];
+
+const GITHUB_USERNAME = "eliyaabbas";
+let projects = [];
+
+try {
+  const response = await fetch(`https://api.github.com/users/${GITHUB_USERNAME}/repos?sort=updated&per_page=100`);
+  if (response.ok) {
+    const repos = await response.json();
+    
+    // Merge GitHub data with featured projects
+    projects = featuredProjects.map(featured => {
+      const repoData = repos.find(r => r.name.toLowerCase() === featured.repo.toLowerCase());
+      return {
+        ...featured,
+        link: repoData?.html_url || `https://github.com/${GITHUB_USERNAME}/${featured.repo}`,
+        stars: repoData?.stargazers_count || 0,
+        language: repoData?.language
+      };
+    });
+
+    // Sort by stars first, then by the original order
+    projects.sort((a, b) => (b.stars || 0) - (a.stars || 0));
+  } else {
+    throw new Error('GitHub API response not ok');
+  }
+} catch (e) {
+  // Fallback to static data if API fails
+  projects = featuredProjects.map(f => ({
+    ...f,
+    link: `https://github.com/${GITHUB_USERNAME}/${f.repo}`,
+    stars: 0
+  }));
+}
 ---
 <section class="section" id="projects">
   <div class="section-inner">
     <span class="section-label">My Work</span>
     <h2 class="section-title reveal">Featured Projects</h2>
-    <p class="section-desc reveal">A curated selection of projects showcasing my technical breadth.</p>
+    <p class="section-desc reveal">A curated selection of projects showcasing my technical breadth, now synced with GitHub.</p>
     <div class="projects-grid">
       {projects.map((project) => (
         <div class="project-card reveal">
@@ -66,6 +107,12 @@ const projects = [
               <Icon name={project.icon} size={24} />
             </div>
             <div class="project-links">
+              {project.stars > 0 && (
+                <span class="project-stars">
+                  <Icon name="lucide:star" size={16} />
+                  {project.stars}
+                </span>
+              )}
               <a href={project.link} target="_blank" title="GitHub"><Icon name="lucide:external-link" size={20} /></a>
             </div>
           </div>
@@ -77,5 +124,29 @@ const projects = [
         </div>
       ))}
     </div>
+    <div class="projects-more reveal">
+      <a href={`https://github.com/${GITHUB_USERNAME}?tab=repositories`} target="_blank" class="btn btn-outline">
+        <Icon name="simple-icons:github" size={18} /> View More on GitHub
+      </a>
+    </div>
   </div>
 </section>
+
+<style>
+  .projects-more {
+    margin-top: 4rem;
+    display: flex;
+    justify-content: center;
+  }
+  .project-stars {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-right: 8px;
+  }
+  .project-stars :global(svg) {
+    color: #ffb400;
+  }
+</style>

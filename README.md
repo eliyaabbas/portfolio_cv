@@ -1,43 +1,56 @@
-# Astro Starter Kit: Minimal
+# Professional Portfolio & CV
 
-```sh
-npm create astro@latest -- --template minimal
-```
+A high-performance, visually rich professional portfolio built with **Astro** and integrated with **Tableau Public**. This project showcases a blend of software engineering projects and data visualization expertise.
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+## 🚀 Features
 
-## 🚀 Project Structure
+- **High Performance:** Built with Astro for optimized static site generation.
+- **Modern UI/UX:** Features a sleek glassmorphism design, fluid typography, and responsive layouts.
+- **Interactive Elements:** Smooth scroll animations powered by ScrollReveal and typing effects.
+- **GitHub Integration:** Dynamically fetches project statistics (stars) and profile-level activity (followers, repo counts, bio) using the GitHub API with robust fallbacks.
+- **Tableau Integration:** Specialized components for showcasing BI dashboards with optimized thumbnails and direct links.
+- **Modular Architecture:** Component-based structure for easy maintenance and scalability.
 
-Inside of your Astro project, you'll see the following folders and files:
+## 🛠️ Tech Stack
+
+- **Framework:** [Astro](https://astro.build/)
+- **Styling:** Vanilla CSS (CSS Variables, Flexbox/Grid)
+- **Icons:** [Astro Icon](https://github.com/natemoo-re/astro-icon) (Lucide & Simple Icons)
+- **Animations:** ScrollReveal.js
+- **Deployment:** Vercel
+
+## 📂 Project Structure
+
+Inside this Astro project, you'll find:
 
 ```text
 /
-├── public/
+├── public/              # Static assets (images, icons, avatar)
 ├── src/
-│   └── pages/
-│       └── index.astro
+│   ├── components/      # Modular UI components (Hero, About, Projects, etc.)
+│   │   ├── TableauProjects.astro # Specialized BI Dashboard showcase
+│   │   └── ...
+│   ├── layouts/         # Page layouts (Layout.astro)
+│   ├── pages/           # Route components (index.astro)
+│   ├── scripts/         # Client-side interactivity (main.js)
+│   └── styles/          # Global design system (global.css)
 └── package.json
 ```
-
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
-
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
-
-Any static assets, like images, can be placed in the `public/` directory.
 
 ## 🧞 Commands
 
 All commands are run from the root of the project, from a terminal:
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+| Command | Action |
+| :--- | :--- |
+| `npm install` | Installs dependencies |
+| `npm run dev` | Starts local dev server at `localhost:4321` |
+| `npm run build` | Build your production site to `./dist/` |
+| `npm run preview` | Preview your build locally |
 
-## 👀 Want to learn more?
+## 📝 License
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+This project is licensed under the [LICENSE](LICENSE) file included in the repository.
+
+---
+Built with ❤️ using Astro.
