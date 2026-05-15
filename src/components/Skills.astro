@@ -59,16 +59,16 @@ import { Icon } from 'astro-icon/components';
       </div>
       <div class="skill-category reveal">
         <div class="skill-category-header">
-          <div class="cat-icon" style="background:rgba(16,185,129,0.12); color:var(--accent-green);"><Icon name="lucide:cpu" size={20} /></div>
-          <h3>AI & Dev Tools</h3>
+          <div class="cat-icon" style="background:rgba(16,185,129,0.12); color:var(--accent-green);"><Icon name="lucide:bot" size={20} /></div>
+          <h3>AI & Modern Engineering</h3>
         </div>
         <div class="skill-tags">
+          <span class="skill-tag highlight">Model Context Protocol (MCP)</span>
+          <span class="skill-tag highlight">Vibe Coding</span>
           <span class="skill-tag">GenAI</span>
-          <span class="skill-tag">GPT Codex</span>
+          <span class="skill-tag">Agentic AI</span>
           <span class="skill-tag">Claude Code</span>
           <span class="skill-tag">Gemini CLI</span>
-          <span class="skill-tag">Antigravity</span>
-          <span class="skill-tag">Vibe Coding</span>
         </div>
       </div>
       <div class="skill-category reveal">
@@ -84,5 +84,150 @@ import { Icon } from 'astro-icon/components';
         </div>
       </div>
     </div>
+
+    <!-- Philosophy Card -->
+    <div class="philosophy-card reveal">
+      <div class="philosophy-icon">
+        <Icon name="lucide:zap" size={32} />
+      </div>
+      <div class="philosophy-content">
+        <span class="philosophy-label">New Era Workflow</span>
+        <h3>Engineering Philosophy</h3>
+        <p class="formula">Core Knowledge + Vibe Coding = <span class="gradient">Fast Production</span></p>
+        <p class="description">
+          Embracing the <strong>Model Context Protocol (MCP)</strong> to bridge AI intelligence with specialized technical contexts. 
+          By combining deep architectural expertise with AI-orchestrated execution, I deliver high-quality production systems 
+          at the speed of thought.
+        </p>
+        <div class="philosophy-pros">
+          <div class="pro-item">
+            <Icon name="lucide:check-circle" size={16} />
+            <span>Standardized Tool Interoperability</span>
+          </div>
+          <div class="pro-item">
+            <Icon name="lucide:check-circle" size={16} />
+            <span>Context-Aware AI Agents</span>
+          </div>
+          <div class="pro-item">
+            <Icon name="lucide:check-circle" size={16} />
+            <span>Eliminated Integration Friction</span>
+          </div>
+          <div class="pro-item">
+            <Icon name="lucide:check-circle" size={16} />
+            <span>Grounding in Real-time Knowledge</span>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
+
+<style>
+  .highlight {
+    border: 1px solid var(--accent-cyan);
+    background: rgba(0, 212, 255, 0.05);
+    color: var(--accent-cyan);
+    font-weight: 600;
+  }
+
+  .philosophy-card {
+    margin-top: 4rem;
+    padding: 3rem;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 24px;
+    display: flex;
+    gap: 2.5rem;
+    align-items: center;
+    backdrop-filter: blur(12px);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .philosophy-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(0, 212, 255, 0.05) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .philosophy-label {
+    display: inline-block;
+    padding: 4px 12px;
+    background: rgba(0, 212, 255, 0.1);
+    color: var(--accent-cyan);
+    border-radius: 100px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 0.75rem;
+  }
+
+  .philosophy-icon {
+    width: 80px;
+    height: 80px;
+    background: rgba(0, 212, 255, 0.1);
+    color: var(--accent-cyan);
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-shadow: 0 0 30px rgba(0, 212, 255, 0.2);
+  }
+
+  .formula {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0.5rem 0 1rem;
+    font-family: var(--font-mono, monospace);
+  }
+
+  .description {
+    color: var(--text-muted);
+    line-height: 1.7;
+    margin-bottom: 2rem;
+    max-width: 800px;
+  }
+
+  .philosophy-pros {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.25rem;
+  }
+
+  .pro-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.95rem;
+    color: var(--text-main);
+  }
+
+  .pro-item :global(svg) {
+    color: var(--accent-green);
+    flex-shrink: 0;
+  }
+
+  @media (max-width: 992px) {
+    .philosophy-card {
+      flex-direction: column;
+      text-align: center;
+      padding: 2.5rem 2rem;
+    }
+    
+    .description {
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .philosophy-pros {
+      text-align: left;
+    }
+  }
+</style>
