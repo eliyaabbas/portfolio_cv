@@ -49,7 +49,7 @@ const stats = profile ? [
             <h3>{profile.name}</h3>
             <p>@{profile.login}</p>
           </div>
-          <a href={profile.html_url} target="_blank" class="btn btn-primary btn-sm">
+          <a href={profile.html_url} target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm">
             <Icon name="simple-icons:github" size={16} /> Follow
           </a>
         </div>
@@ -61,7 +61,7 @@ const stats = profile ? [
             </span>
           )}
           {profile.blog && (
-            <a href={profile.blog} target="_blank" class="meta-item">
+            <a href={profile.blog} target="_blank" rel="noopener noreferrer" class="meta-item">
               <Icon name="lucide:link" size={14} /> Website
             </a>
           )}
@@ -77,23 +77,25 @@ const stats = profile ? [
 <style>
   .stats-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1.5rem;
-    margin-bottom: 3rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
+    gap: var(--space-2);
+    margin-bottom: var(--space-4);
   }
   .stat-card {
     background: var(--bg-card);
     border: 1px solid var(--border);
     border-radius: var(--radius-sm);
-    padding: 1.5rem;
+    padding: var(--space-3);
     display: flex;
     align-items: center;
-    gap: 1.2rem;
+    gap: var(--space-2);
     transition: var(--transition);
   }
-  .stat-card:hover {
-    border-color: var(--accent-cyan);
-    transform: translateY(-4px);
+  @media (hover: hover) {
+    .stat-card:hover {
+      border-color: var(--accent-cyan);
+      transform: translateY(-4px);
+    }
   }
   .stat-icon {
     color: var(--accent-cyan);
@@ -125,7 +127,7 @@ const stats = profile ? [
     background: var(--bg-card);
     border: 1px solid var(--border);
     border-radius: var(--radius);
-    padding: 2rem;
+    padding: var(--card-pad);
     max-width: 800px;
     margin: 0 auto;
     position: relative;
@@ -163,7 +165,8 @@ const stats = profile ? [
   .btn-sm {
     padding: 8px 16px;
     font-size: 0.8rem;
-    margin-left: auto;
+    width: 100%;
+    justify-content: center;
   }
   .profile-bio {
     color: var(--text-secondary);
@@ -189,7 +192,7 @@ const stats = profile ? [
     color: var(--text-primary);
   }
 
-  @media (max-width: 600px) {
-    .btn-sm { margin-left: 0; width: 100%; justify-content: center; }
+  @media (min-width: 600px) {
+    .btn-sm { margin-left: auto; width: auto; }
   }
 </style>

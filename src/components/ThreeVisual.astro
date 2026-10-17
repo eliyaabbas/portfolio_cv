@@ -50,6 +50,17 @@
       blending: THREE.AdditiveBlending
     });
 
+    // Additive blending vanishes on a light background, so swap blending/opacity per theme
+    const applyTheme = () => {
+      const light = document.documentElement.getAttribute('data-theme') === 'light';
+      material.blending = light ? THREE.NormalBlending : THREE.AdditiveBlending;
+      material.opacity = light ? 1 : 0.8;
+      material.size = light ? 0.085 : 0.05;
+      material.needsUpdate = true;
+    };
+    applyTheme();
+    window.addEventListener('themechange', applyTheme);
+
     const points = new THREE.Points(geometry, material);
     scene.add(points);
 

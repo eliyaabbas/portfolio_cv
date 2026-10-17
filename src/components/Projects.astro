@@ -1,122 +1,135 @@
 ---
 import { Icon } from 'astro-icon/components';
 
-// Static project data with repo names for matching
-const featuredProjects = [
-  {
-    repo: "DeFi_Credit_Coring_Model",
-    title: "DeFi Agentic Credit Scorer",
+// Project data. `repo` links to GitHub; entries without a repo are client, professional or in-progress work.
+// category: ai | data | web
+const allProjects = [
+  // ----- AI & ML -----
+  { repo: "DeFi_Credit_Coring_Model", category: "ai", title: "DeFi Agentic Credit Scorer", icon: "lucide:landmark",
     desc: "End-to-end production pipeline assigning 0–1000 credit scores to Aave V2 wallets using unsupervised KMeans clustering on raw DeFi transaction data for decision intelligence.",
-    tech: ["Python", "KMeans", "DeFi", "Financial AI"],
-    icon: "lucide:landmark"
-  },
-  {
-    repo: "LiveRestaurantMenu",
-    title: "Real-time Service Orchestration",
-    desc: "A scalable digital service platform with real-time menu management, featuring production-grade API design and secure administrative workflows.",
-    tech: ["Node.js", "MongoDB", "Service Design"],
-    icon: "lucide:utensils-crossed"
-  },
-  {
-    repo: "SkyBricks-Project4-Movie-Recommender",
-    title: "NLP Recommender Engine",
-    desc: "Content-aware recommendation engine utilizing NLP-based feature extraction and collaborative filtering for high-precision user targeting.",
-    tech: ["Python", "NLP", "Scikit-learn"],
-    icon: "lucide:film"
-  },
-  {
-    repo: "Internshala_BI_Projects",
-    title: "Decision Intelligence Dashboards",
-    desc: "Advanced BI orchestration using Excel, Power BI, and Python to transform complex datasets into actionable decision-making frameworks.",
-    tech: ["Power BI", "SQL", "Analytics"],
-    icon: "lucide:pie-chart"
-  },
-  {
-    repo: "Risk_Score",
-    title: "On-chain Risk Assessment",
-    desc: "Statistical risk scoring engine for Ethereum wallets, analyzing on-chain behavior to assess reliability and protocol safety.",
-    tech: ["Python", "Blockchain", "Statistics"],
-    icon: "lucide:alert-triangle"
-  },
-  {
-    repo: "Predictive-Employee-Attrition-Model",
-    title: "Predictive HR Analytics",
+    tech: ["Python", "KMeans", "DeFi", "Financial AI"] },
+  { repo: "Risk_Score", category: "ai", title: "On-chain Risk Assessment", icon: "lucide:alert-triangle",
+    desc: "Risk scoring engine that rates 100 Ethereum wallets from 0 to 1000 using Compound V2 activity pulled from the Etherscan API, with a weighted, normalised feature model.",
+    tech: ["Python", "Blockchain", "Etherscan API"] },
+  { repo: "PortfolioAI", category: "ai", title: "Agentic Portfolio Assistant", icon: "lucide:bot",
+    desc: "A React portfolio with an integrated AI chatbot powered by Mistral 7B Instruct, scoped to answer questions about my technical expertise and projects.",
+    tech: ["React", "Vite", "Mistral 7B", "LLM"] },
+  { repo: "SkyBricks-Project4-Movie-Recommender", category: "ai", title: "NLP Recommender Engine", icon: "lucide:film",
+    desc: "Content-based movie recommender on the TMDB 5000 dataset (4,800+ titles) using NLP feature extraction and cosine similarity, deployed as a Streamlit app with poster integration.",
+    tech: ["Python", "NLP", "Scikit-learn", "Streamlit"] },
+  { repo: "Python-Churn-Project", category: "ai", title: "Customer Churn Prediction", icon: "lucide:user-minus",
+    desc: "Telco churn model on 7,043 customers comparing Logistic Regression and Random Forest on ROC-AUC and recall. Random Forest reached 0.842 ROC-AUC and 77% churn recall; month-to-month contracts churned at 42.7% vs 2.8% on two-year plans.",
+    tech: ["Python", "Scikit-learn", "Pandas", "Seaborn"] },
+  { repo: "Project-5", category: "ai", title: "Flight Delay Prediction", icon: "lucide:plane",
+    desc: "Predicts whether a flight will be delayed from carrier and airport data (Kaggle Airline Delay dataset). Compares Logistic Regression and Random Forest and ships the best model with an evaluation report.",
+    tech: ["Python", "Random Forest", "Scikit-learn"] },
+  { repo: "Predictive-Employee-Attrition-Model", category: "ai", title: "Predictive HR Analytics", icon: "lucide:users",
     desc: "Predictive ML model for employee churn analysis, utilizing classification algorithms to drive data-driven retention strategies.",
-    tech: ["Python", "ML", "HR Tech"],
-    icon: "lucide:users"
-  },
-  {
-    repo: "TitanicSurvivalPrediction",
-    title: "Classification Core Model",
+    tech: ["Python", "ML", "HR Tech"] },
+  { repo: "TitanicSurvivalPrediction", category: "ai", title: "Classification Core Model", icon: "lucide:ship",
     desc: "Supervised learning implementation for predictive classification, focused on feature engineering and model accuracy optimization.",
-    tech: ["Python", "Classification", "ML"],
-    icon: "lucide:ship"
-  },
-  {
-    repo: "PortfolioAI",
-    title: "Agentic Portfolio Assistant",
-    desc: "An RAG-powered AI assistant for codebase intelligence and interactive user engagement, built with modern LLM orchestration.",
-    tech: ["LLM", "RAG", "Agentic AI"],
-    icon: "lucide:bot"
-  }
+    tech: ["Python", "Classification", "ML"] },
+  { category: "ai", title: "LLM Code Evaluation & Benchmarking", icon: "lucide:flask-conical", note: "Professional work · AirDawg Labs",
+    desc: "Evaluated LLM-generated code and reasoning against Terminal-Bench and SWE-Bench: wrote and reviewed test cases, debugged execution failures, and compared models in reproducible Docker, Linux and WSL environments.",
+    tech: ["LLM Evaluation", "Terminal-Bench", "SWE-Bench", "Docker"] },
+
+  // ----- Data & BI -----
+  { repo: "skybricks-data-science-internship", category: "data", title: "SkyBricks EDA Projects", icon: "lucide:search-code",
+    desc: "End-to-end exploratory analysis for my SkyBricks internship: Telco churn data preparation and a Netflix Titles study covering missing-value handling, datetime parsing, feature extraction and trend visualisation.",
+    tech: ["Python", "Pandas", "Seaborn", "EDA"] },
+  { repo: "Internshala_BI_Projects", category: "data", title: "Decision Intelligence Dashboards", icon: "lucide:pie-chart",
+    desc: "Advanced BI orchestration using Excel, Power BI, and Python to transform complex datasets into actionable decision-making frameworks.",
+    tech: ["Power BI", "SQL", "Analytics"] },
+  { category: "data", title: "HR & Recruitment Dashboard Suite", icon: "lucide:layout-dashboard", note: "Client work · US-based HR firm",
+    desc: "100+ interactive Tableau dashboards covering hiring KPIs, attrition, time-to-fill, compensation benchmarking and headcount planning, used in weekly executive reviews.",
+    tech: ["Tableau", "HR Analytics", "KPI Design"] },
+
+  // ----- Full-stack & web -----
+  { repo: "LiveRestaurantMenu", category: "web", title: "Real-time Service Orchestration", icon: "lucide:utensils-crossed",
+    desc: "Full-stack QR digital menu platform: Google OAuth and email login, multi-menu dashboard, interactive menu builder, 8 templates, publishing with QR code generation, and a searchable public menu.",
+    tech: ["Node.js", "Express", "MongoDB", "OAuth"] },
+  { repo: "portfolio_cv", category: "web", title: "This Portfolio Website", icon: "lucide:globe",
+    desc: "Astro site with a Three.js particle hero, light/dark themes, an in-page PDF resume viewer with a highlighter marker, and structured-data SEO.",
+    tech: ["Astro", "Three.js", "SEO", "JavaScript"] },
+  { category: "web", title: "FastAPI + MongoDB Backend", icon: "lucide:server", note: "Freelance work",
+    desc: "Backend-driven application with REST endpoints on FastAPI and MongoDB, JWT authentication, and a modular architecture built to plug into AI workflows.",
+    tech: ["FastAPI", "MongoDB", "JWT", "REST"] },
+  { category: "web", title: "InteliHuman Business Website", icon: "lucide:layout-template", note: "Client work",
+    desc: "Responsive, SEO-optimised static site in HTML5 and TailwindCSS with semantic markup and structured metadata. Loads in under a second and was delivered production-ready in 8 days.",
+    tech: ["HTML5", "TailwindCSS", "SEO"] },
+  { category: "web", title: "Zip Utility App", icon: "lucide:file-archive", status: "In progress",
+    desc: "A faster, redesigned alternative to legacy zip-file tools, built AI-first with an LLM-guided project structure and an SEO-first architecture.",
+    tech: ["Astro", "SEO"] },
+  { category: "web", title: "Utility Calculator Site", icon: "lucide:calculator", status: "In progress",
+    desc: "A set of utility calculators, starting with BMI and mortgage, modernising outdated high-traffic tools as part of a micro-tool portfolio.",
+    tech: ["Astro", "JavaScript", "SEO"] },
+  { repo: "Command-Line-Contact-Book-Application", category: "web", title: "CLI Contact Book", icon: "lucide:book-user",
+    desc: "Python command-line app to add, view and search contacts by name or phone number, with persistent text-file storage.",
+    tech: ["Python", "File I/O", "CLI"] },
+];
+
+const categories = [
+  { id: "all", label: "All" },
+  { id: "ai", label: "AI & ML" },
+  { id: "data", label: "Data & BI" },
+  { id: "web", label: "Full-Stack & Web" }
 ];
 
 const GITHUB_USERNAME = "eliyaabbas";
-let projects = [];
-
+let repos = [];
 try {
   const response = await fetch(`https://api.github.com/users/${GITHUB_USERNAME}/repos?sort=updated&per_page=100`);
-  if (response.ok) {
-    const repos = await response.json();
-    
-    // Merge GitHub data with featured projects
-    projects = featuredProjects.map(featured => {
-      const repoData = repos.find(r => r.name.toLowerCase() === featured.repo.toLowerCase());
-      return {
-        ...featured,
-        link: repoData?.html_url || `https://github.com/${GITHUB_USERNAME}/${featured.repo}`,
-        stars: repoData?.stargazers_count || 0,
-        language: repoData?.language
-      };
-    });
-
-    // Sort by stars first, then by the original order
-    projects.sort((a, b) => (b.stars || 0) - (a.stars || 0));
-  } else {
-    throw new Error('GitHub API response not ok');
-  }
+  if (response.ok) repos = await response.json();
 } catch (e) {
-  // Fallback to static data if API fails
-  projects = featuredProjects.map(f => ({
-    ...f,
-    link: `https://github.com/${GITHUB_USERNAME}/${f.repo}`,
-    stars: 0
-  }));
+  // GitHub API unavailable or rate limited: render without live star counts
 }
+
+const projects = allProjects.map((p) => {
+  const repoData = Array.isArray(repos) ? repos.find((r) => p.repo && r.name.toLowerCase() === p.repo.toLowerCase()) : null;
+  return {
+    ...p,
+    link: p.repo ? (repoData?.html_url || `https://github.com/${GITHUB_USERNAME}/${p.repo}`) : null,
+    stars: repoData?.stargazers_count || 0
+  };
+});
 ---
 <section class="section" id="projects">
   <div class="section-inner">
     <span class="section-label">My Work</span>
-    <h2 class="section-title reveal">Featured Projects</h2>
-    <p class="section-desc reveal">A curated selection of projects showcasing my technical breadth, now synced with GitHub.</p>
-    <div class="projects-grid">
+    <h2 class="section-title reveal">Projects</h2>
+    <p class="section-desc reveal">{projects.length} projects across AI &amp; ML, data and BI, and full-stack development. Repo-backed projects link to GitHub; client and professional work is described without code.</p>
+
+    <div class="project-filters reveal" role="group" aria-label="Filter projects by category">
+      {categories.map((c) => (
+        <button type="button" class={`filter-chip${c.id === 'all' ? ' active' : ''}`} data-filter={c.id} aria-pressed={c.id === 'all' ? 'true' : 'false'}>
+          {c.label}
+          <span class="count">{c.id === 'all' ? projects.length : projects.filter((p) => p.category === c.id).length}</span>
+        </button>
+      ))}
+    </div>
+
+    <div class="projects-grid" id="projects-grid">
       {projects.map((project) => (
-        <div class="project-card reveal">
+        <div class="project-card reveal" data-category={project.category}>
           <div class="project-header">
             <div class="project-icon">
               <Icon name={project.icon} size={24} />
             </div>
             <div class="project-links">
+              {project.status && <span class="project-status">{project.status}</span>}
               {project.stars > 0 && (
                 <span class="project-stars">
                   <Icon name="lucide:star" size={16} />
                   {project.stars}
                 </span>
               )}
-              <a href={project.link} target="_blank" title="GitHub"><Icon name="lucide:external-link" size={20} /></a>
+              {project.link && (
+                <a href={project.link} target="_blank" rel="noopener noreferrer" title="View on GitHub" aria-label={`${project.title} on GitHub`}><Icon name="lucide:external-link" size={20} /></a>
+              )}
             </div>
           </div>
           <h3>{project.title}</h3>
+          {project.note && <span class="project-note">{project.note}</span>}
           <p>{project.desc}</p>
           <div class="project-tech">
             {project.tech.map((t) => <span>{t}</span>)}
@@ -124,8 +137,10 @@ try {
         </div>
       ))}
     </div>
+
     <div class="projects-more reveal">
-      <a href={`https://github.com/${GITHUB_USERNAME}?tab=repositories`} target="_blank" class="btn btn-outline">
+      <button type="button" class="btn btn-outline" id="projects-toggle" hidden></button>
+      <a href={`https://github.com/${GITHUB_USERNAME}?tab=repositories`} target="_blank" rel="noopener noreferrer" class="btn btn-outline">
         <Icon name="simple-icons:github" size={18} /> View More on GitHub
       </a>
     </div>
@@ -134,9 +149,55 @@ try {
 
 <style>
   .projects-more {
-    margin-top: 4rem;
+    margin-top: 3rem;
     display: flex;
     justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  .project-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-bottom: 2rem;
+  }
+  .filter-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.45rem 1rem;
+    border-radius: 100px;
+    border: 1px solid var(--border);
+    background: var(--bg-card);
+    color: var(--text-secondary);
+    font: inherit;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--transition);
+  }
+  .filter-chip:hover { border-color: var(--accent-cyan); color: var(--text-primary); }
+  .filter-chip.active { border-color: var(--accent-cyan); color: var(--accent-cyan); background: rgba(0, 212, 255, 0.1); }
+  .filter-chip .count { font-size: 0.72rem; opacity: 0.75; }
+  .project-card[hidden] { display: none; }
+  .project-note {
+    display: inline-block;
+    margin: -0.25rem 0 0.5rem;
+    font-size: 0.75rem;
+    color: var(--accent-purple);
+    font-weight: 600;
+    letter-spacing: 0.3px;
+  }
+  .project-status {
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 2px 8px;
+    border-radius: 100px;
+    color: var(--accent-orange);
+    border: 1px solid var(--accent-orange);
+    margin-right: 8px;
   }
   .project-stars {
     display: flex;
@@ -150,3 +211,43 @@ try {
     color: #ffb400;
   }
 </style>
+
+<script>
+  const INITIAL = 9;
+  const grid = document.getElementById('projects-grid');
+  const toggle = document.getElementById('projects-toggle') as HTMLButtonElement | null;
+  const chips = document.querySelectorAll<HTMLButtonElement>('.filter-chip');
+  const cards = grid ? Array.from(grid.querySelectorAll<HTMLElement>('.project-card')) : [];
+  let filter = 'all';
+  let expanded = false;
+
+  function render() {
+    const matching = cards.filter((c) => filter === 'all' || c.dataset.category === filter);
+    cards.forEach((c) => (c.hidden = true));
+    const limit = filter === 'all' && !expanded ? INITIAL : matching.length;
+    matching.forEach((c, i) => (c.hidden = i >= limit));
+    if (toggle) {
+      const needsToggle = filter === 'all' && matching.length > INITIAL;
+      toggle.hidden = !needsToggle;
+      toggle.textContent = expanded ? 'Show fewer projects' : `Show all ${matching.length} projects`;
+    }
+  }
+
+  chips.forEach((chip) =>
+    chip.addEventListener('click', () => {
+      filter = chip.dataset.filter || 'all';
+      chips.forEach((c) => {
+        const on = c === chip;
+        c.classList.toggle('active', on);
+        c.setAttribute('aria-pressed', String(on));
+      });
+      render();
+    })
+  );
+  toggle?.addEventListener('click', () => {
+    expanded = !expanded;
+    render();
+    if (!expanded) document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' });
+  });
+  render();
+</script>

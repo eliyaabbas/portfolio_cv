@@ -52,7 +52,7 @@ const dashboards = [
           <div class="tableau-img-wrapper">
             <img src={dash.thumbnail} alt={dash.title} loading="lazy" />
             <div class="tableau-overlay">
-              <a href={dash.link} target="_blank" class="btn btn-primary">
+              <a href={dash.link} target="_blank" rel="noopener noreferrer" class="btn btn-primary">
                 <Icon name="lucide:external-link" size={18} />
                 View Dashboard
               </a>
@@ -77,8 +77,8 @@ const dashboards = [
 <style>
   .tableau-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 2rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+    gap: var(--space-3);
   }
   .tableau-card {
     background: var(--bg-card);
@@ -109,7 +109,7 @@ const dashboards = [
   .tableau-overlay {
     position: absolute;
     inset: 0;
-    background: rgba(6, 8, 13, 0.6);
+    background: var(--overlay-bg);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -141,7 +141,7 @@ const dashboards = [
     gap: 4px;
     color: var(--text-muted);
     font-size: 0.8rem;
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--chip-bg);
     padding: 2px 8px;
     border-radius: 4px;
     flex-shrink: 0;
@@ -152,9 +152,4 @@ const dashboards = [
     line-height: 1.6;
   }
 
-  @media (max-width: 480px) {
-    .tableau-grid {
-      grid-template-columns: 1fr;
-    }
-  }
 </style>

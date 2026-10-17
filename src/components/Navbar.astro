@@ -1,9 +1,10 @@
 ---
+import { Icon } from 'astro-icon/components';
 ---
 <nav class="navbar" id="navbar">
   <div class="nav-inner">
     <a href="#" class="nav-logo">
-      <img src="/logo.png" alt="Eliya Abbas Logo" height="32" style="border-radius: 6px;" />
+      <img src="/logo.webp" alt="Eliya Abbas logo" height="32" width="32" style="border-radius: 6px;" />
     </a>
     <ul class="nav-links" id="navLinks">
       <li><a href="#about">About</a></li>
@@ -14,6 +15,10 @@
       <li><a href="#education">Education</a></li>
       <li><a href="#contact">Contact</a></li>
     </ul>
+    <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle light and dark theme" title="Toggle theme">
+      <span class="icon-moon"><Icon name="lucide:moon" size={18} /></span>
+      <span class="icon-sun"><Icon name="lucide:sun" size={18} /></span>
+    </button>
     <button class="hamburger" id="hamburger" aria-label="Toggle navigation menu">
       <span></span><span></span><span></span>
     </button>

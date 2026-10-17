@@ -1,0 +1,233 @@
+---
+import { Icon } from 'astro-icon/components';
+---
+<div class="resume-modal" id="resume-modal" role="dialog" aria-modal="true" aria-label="Resume" hidden>
+  <div class="resume-backdrop" data-resume-close></div>
+  <div class="resume-panel dark">
+    <div class="resume-bar">
+      <h3>Resume — Eliya Abbas</h3>
+      <div class="resume-actions">
+        <button class="btn btn-outline tool" type="button" id="resume-theme" aria-pressed="true" title="Toggle dark mode"><Icon name="lucide:moon" size={16} /> <span id="resume-theme-label">Dark</span></button>
+        <a class="btn btn-primary" href="/Profile.pdf" download="Eliya_Abbas_Resume.pdf"><Icon name="lucide:download" size={16} /> Download</a>
+        <a class="btn btn-outline" href="/Profile.pdf" target="_blank" rel="noopener"><Icon name="lucide:external-link" size={16} /> Open in tab</a>
+        <button class="resume-close" type="button" aria-label="Close resume" data-resume-close><Icon name="lucide:x" size={20} /></button>
+      </div>
+    </div>
+    <div class="marker-bar" role="toolbar" aria-label="Marker tools">
+      <button class="btn btn-outline tool" type="button" id="marker-toggle" aria-pressed="false" title="Highlight with a marker"><Icon name="lucide:highlighter" size={16} /> Marker</button>
+      <div class="swatches" id="marker-colors" role="radiogroup" aria-label="Marker colour">
+        <button type="button" class="swatch active" role="radio" aria-checked="true" aria-label="Yellow" data-color="#ffe14d" style="--c:#ffe14d"></button>
+        <button type="button" class="swatch" role="radio" aria-checked="false" aria-label="Green" data-color="#4dff91" style="--c:#4dff91"></button>
+        <button type="button" class="swatch" role="radio" aria-checked="false" aria-label="Pink" data-color="#ff6ec7" style="--c:#ff6ec7"></button>
+        <button type="button" class="swatch" role="radio" aria-checked="false" aria-label="Cyan" data-color="#4dd8ff" style="--c:#4dd8ff"></button>
+      </div>
+      <button class="btn btn-outline tool" type="button" id="marker-undo" title="Undo last mark"><Icon name="lucide:undo-2" size={16} /> Undo</button>
+      <button class="btn btn-outline tool" type="button" id="marker-clear" title="Clear all marks"><Icon name="lucide:eraser" size={16} /> Clear</button>
+    </div>
+    <div class="resume-scroll" id="resume-scroll">
+      <div class="resume-pages" id="resume-pages"></div>
+      <p class="resume-msg" id="resume-msg">Loading resume…</p>
+    </div>
+  </div>
+</div>
+
+<style>
+  .resume-modal { position: fixed; inset: 0; z-index: 10000; display: flex; align-items: center; justify-content: center; padding: 0.5rem; }
+  .resume-modal[hidden] { display: none; }
+  .resume-backdrop { position: absolute; inset: 0; background: rgba(0, 0, 0, 0.75); backdrop-filter: blur(6px); }
+  .resume-panel {
+    position: relative; width: min(960px, 100%); height: 94vh; height: 94svh;
+    display: flex; flex-direction: column; overflow: hidden;
+    background: var(--bg-card); border: 1px solid var(--card-border, rgba(255,255,255,0.1)); border-radius: 16px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+    animation: resume-in 0.25s ease;
+  }
+  .resume-bar, .marker-bar { display: flex; align-items: center; gap: 0.75rem; padding: 0.6rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.08); flex-wrap: wrap; }
+  .resume-bar { justify-content: space-between; }
+  .resume-bar h3 { font-size: 1rem; margin: 0; }
+  .resume-actions { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
+  .resume-panel :global(.btn) { padding: 0.45rem 0.9rem; font-size: 0.85rem; }
+  .resume-panel :global(.tool[aria-pressed="true"]) { border-color: var(--accent-cyan); color: var(--accent-cyan); background: rgba(0, 212, 255, 0.1); }
+  .resume-close { background: transparent; border: 0; color: var(--text-main, #fff); cursor: pointer; padding: 0.4rem; border-radius: 8px; display: flex; }
+  .resume-close:hover { background: rgba(255,255,255,0.1); }
+  .swatches { display: flex; gap: 0.4rem; }
+  .swatch { width: 24px; height: 24px; border-radius: 50%; background: var(--c); border: 2px solid transparent; cursor: pointer; padding: 0; }
+  .swatch.active { border-color: #fff; box-shadow: 0 0 0 2px var(--c); }
+  .resume-scroll { flex: 1; overflow: auto; background: #e8e8ec; padding: 0.5rem; position: relative; -webkit-overflow-scrolling: touch; }
+  .resume-panel.dark .resume-scroll { background: #1a1d24; }
+  .resume-pages { display: flex; flex-direction: column; align-items: center; gap: 1rem; }
+  .resume-msg { text-align: center; color: var(--text-muted, #888); margin: 2rem 0; }
+  .resume-msg:empty { display: none; }
+  .resume-msg :global(a) { color: var(--accent-cyan); }
+  :global(.page-wrap) { position: relative; width: 100%; max-width: 860px; box-shadow: 0 4px 20px rgba(0,0,0,0.35); background: #fff; line-height: 0; }
+  :global(.page-wrap canvas) { width: 100%; height: auto; display: block; }
+  :global(.resume-panel.dark .page-wrap canvas.pdf-canvas) { filter: invert(0.92) hue-rotate(180deg) contrast(0.95); }
+  :global(.resume-panel.dark .page-wrap) { background: #111; }
+  :global(.page-wrap canvas.mark-canvas) { position: absolute; inset: 0; width: 100%; height: 100%; touch-action: auto; }
+  :global(.resume-panel.marking .page-wrap canvas.mark-canvas) { touch-action: none; cursor: crosshair; }
+  @keyframes resume-in { from { opacity: 0; transform: translateY(12px) scale(0.98); } to { opacity: 1; transform: none; } }
+  @media (min-width: 600px) { .resume-modal { padding: 1.5rem; } .resume-panel { height: min(92vh, 1100px); } .resume-scroll { padding: 1rem; } }
+</style>
+
+<script>
+  const PDF_URL = '/Profile.pdf';
+  const PDFJS = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
+  const PDFJS_WORKER = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+  type Pt = [number, number];
+  type Stroke = { page: number; color: string; pts: Pt[] };
+
+  const $ = (id: string) => document.getElementById(id) as HTMLElement;
+  const modal = $('resume-modal');
+  const panel = modal.querySelector('.resume-panel') as HTMLElement;
+  const pagesEl = $('resume-pages');
+  const msgEl = $('resume-msg');
+  const themeBtn = $('resume-theme');
+  const themeLabel = $('resume-theme-label');
+  const markBtn = $('marker-toggle');
+
+  let lastFocus: HTMLElement | null = null;
+  let loaded = false;
+  let marking = false;
+  let color = '#ffe14d';
+  const strokes: Stroke[] = [];
+  const markCanvases: HTMLCanvasElement[] = [];
+
+  // ----- dark mode -----
+  function setDark(on: boolean) {
+    panel.classList.toggle('dark', on);
+    themeBtn.setAttribute('aria-pressed', String(on));
+    themeLabel.textContent = on ? 'Dark' : 'Light';
+    try { localStorage.setItem('resume-dark', on ? '1' : '0'); } catch {}
+  }
+  let saved: string | null = null;
+  try { saved = localStorage.getItem('resume-dark'); } catch {}
+  setDark(saved === null ? document.documentElement.getAttribute('data-theme') !== 'light' : saved !== '0');
+  themeBtn.addEventListener('click', () => setDark(!panel.classList.contains('dark')));
+
+  // ----- marker -----
+  function redraw(i: number) {
+    const c = markCanvases[i];
+    if (!c) return;
+    const ctx = c.getContext('2d')!;
+    ctx.clearRect(0, 0, c.width, c.height);
+    ctx.lineCap = ctx.lineJoin = 'round';
+    ctx.lineWidth = c.width * 0.022;
+    ctx.globalAlpha = 0.4;
+    for (const s of strokes) {
+      if (s.page !== i || !s.pts.length) continue;
+      ctx.strokeStyle = s.color;
+      ctx.beginPath();
+      s.pts.forEach(([x, y], k) => (k ? ctx.lineTo(x * c.width, y * c.height) : ctx.moveTo(x * c.width, y * c.height)));
+      if (s.pts.length === 1) ctx.lineTo(s.pts[0][0] * c.width + 0.1, s.pts[0][1] * c.height);
+      ctx.stroke();
+    }
+  }
+
+  function attachDrawing(c: HTMLCanvasElement, i: number) {
+    let cur: Stroke | null = null;
+    const pt = (e: PointerEvent): Pt => {
+      const r = c.getBoundingClientRect();
+      return [(e.clientX - r.left) / r.width, (e.clientY - r.top) / r.height];
+    };
+    c.addEventListener('pointerdown', (e) => {
+      if (!marking) return;
+      e.preventDefault();
+      c.setPointerCapture(e.pointerId);
+      cur = { page: i, color, pts: [pt(e)] };
+      strokes.push(cur);
+      redraw(i);
+    });
+    c.addEventListener('pointermove', (e) => {
+      if (!cur) return;
+      cur.pts.push(pt(e));
+      redraw(i);
+    });
+    const end = () => { cur = null; };
+    c.addEventListener('pointerup', end);
+    c.addEventListener('pointercancel', end);
+  }
+
+  markBtn.addEventListener('click', () => {
+    marking = !marking;
+    markBtn.setAttribute('aria-pressed', String(marking));
+    panel.classList.toggle('marking', marking);
+  });
+  $('marker-colors').addEventListener('click', (e) => {
+    const sw = (e.target as HTMLElement).closest('.swatch') as HTMLElement | null;
+    if (!sw) return;
+    color = sw.dataset.color!;
+    document.querySelectorAll('#marker-colors .swatch').forEach((s) => {
+      s.classList.toggle('active', s === sw);
+      s.setAttribute('aria-checked', String(s === sw));
+    });
+    if (!marking) markBtn.click();
+  });
+  $('marker-undo').addEventListener('click', () => {
+    const s = strokes.pop();
+    if (s) redraw(s.page);
+  });
+  $('marker-clear').addEventListener('click', () => {
+    strokes.length = 0;
+    markCanvases.forEach((_, i) => redraw(i));
+  });
+
+  // ----- PDF rendering -----
+  function loadScript(src: string) {
+    return new Promise<void>((res, rej) => {
+      const s = document.createElement('script');
+      s.src = src; s.onload = () => res(); s.onerror = () => rej(new Error('script'));
+      document.head.appendChild(s);
+    });
+  }
+
+  async function loadPdf() {
+    try {
+      await loadScript(PDFJS);
+      const lib = (window as any).pdfjsLib;
+      lib.GlobalWorkerOptions.workerSrc = PDFJS_WORKER;
+      const pdf = await lib.getDocument(PDF_URL).promise;
+      const scale = Math.min(2.5, (window.devicePixelRatio || 1) * 1.6);
+      for (let n = 1; n <= pdf.numPages; n++) {
+        const page = await pdf.getPage(n);
+        const vp = page.getViewport({ scale });
+        const wrap = document.createElement('div');
+        wrap.className = 'page-wrap';
+        const pc = document.createElement('canvas');
+        pc.className = 'pdf-canvas';
+        pc.width = vp.width; pc.height = vp.height;
+        const mc = document.createElement('canvas');
+        mc.className = 'mark-canvas';
+        mc.width = vp.width; mc.height = vp.height;
+        wrap.append(pc, mc);
+        pagesEl.appendChild(wrap);
+        markCanvases[n - 1] = mc;
+        attachDrawing(mc, n - 1);
+        await page.render({ canvasContext: pc.getContext('2d')!, viewport: vp }).promise;
+      }
+      msgEl.textContent = '';
+      loaded = true;
+    } catch {
+      msgEl.innerHTML = `Couldn't preview the resume here. <a href="${PDF_URL}" target="_blank" rel="noopener">Open it in a new tab</a>.`;
+    }
+  }
+
+  // ----- open / close -----
+  function openResume() {
+    lastFocus = document.activeElement as HTMLElement | null;
+    modal.hidden = false;
+    document.body.style.overflow = 'hidden';
+    (modal.querySelector('.resume-close') as HTMLElement).focus();
+    if (!loaded && !pagesEl.hasChildNodes()) loadPdf();
+  }
+  function closeResume() {
+    modal.hidden = true;
+    document.body.style.overflow = '';
+    lastFocus?.focus();
+  }
+  document.querySelectorAll('[data-resume-open]').forEach((el) =>
+    el.addEventListener('click', (e) => { e.preventDefault(); openResume(); })
+  );
+  modal.querySelectorAll('[data-resume-close]').forEach((el) => el.addEventListener('click', closeResume));
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !modal.hidden) closeResume(); });
+</script>

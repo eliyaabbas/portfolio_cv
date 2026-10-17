@@ -68,7 +68,7 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 // ===== TYPING EFFECT =====
 const typingEl = document.querySelector('.typing-text');
 if (typingEl) {
-  const roles = ['Software Engineer', 'MCP & Vibe Coder', 'AI Solutions Architect', 'Data Analyst'];
+  const roles = ['Software Engineer', 'AI Engineer', 'LLM Evaluation Specialist', 'Data Scientist'];
   let roleIndex = 0;
   let charIndex = 0;
   let isDeleting = false;
@@ -123,3 +123,18 @@ window.addEventListener('scroll', () => {
     }
   });
 });
+
+// ===== THEME TOGGLE =====
+(function () {
+  const root = document.documentElement;
+  const btn = document.getElementById('themeToggle');
+  const meta = document.querySelector('meta[name="theme-color"]');
+  const apply = (light) => {
+    if (light) root.setAttribute('data-theme', 'light'); else root.removeAttribute('data-theme');
+    if (meta) meta.setAttribute('content', light ? '#f6f7fb' : '#06080d');
+    try { localStorage.setItem('theme', light ? 'light' : 'dark'); } catch (e) {}
+    window.dispatchEvent(new CustomEvent('themechange', { detail: { light } }));
+  };
+  if (meta && root.getAttribute('data-theme') === 'light') meta.setAttribute('content', '#f6f7fb');
+  btn?.addEventListener('click', () => apply(root.getAttribute('data-theme') !== 'light'));
+})();

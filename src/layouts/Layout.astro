@@ -2,48 +2,79 @@
 import "../styles/global.css";
 
 interface Props {
-	title: string;
+	title?: string;
 	description?: string;
-    image?: string;
+	image?: string;
+	noindex?: boolean;
 }
 
-const { 
-  title = "Eliya Abbas Sayyed | AI Solutions Architect & Data Analytics Expert", 
-  description = "Portfolio of Eliya Abbas Sayyed — AI Solutions Architect specializing in Agentic AI, RAG, and Machine Learning. Expert in Decision Intelligence and Big Data Analytics at Innoviscent LPP.",
-  image = "/logo.png"
+const SITE = "https://eliyaasayyed.works";
+
+const {
+  title = "Eliya Abbas | AI Engineer, Data Scientist & LLM Evaluation",
+  description = "Portfolio of Eliya Abbas — AI Engineer and Data Scientist specializing in Generative AI, LLM Evaluation and Benchmarking, Machine Learning, and Python/FastAPI systems. Software Engineer at Innoviscent LLP, Mumbai.",
+  image = "/og-image.jpg",
+  noindex = false
 } = Astro.props;
 
-const canonicalURL = new URL(Astro.url.pathname, "https://eliyaabbas.com");
+const canonicalURL = new URL(Astro.url.pathname, SITE);
+const imageURL = new URL(image, SITE).href;
 
 const schema = {
   "@context": "https://schema.org",
-  "@type": "Person",
-  "name": "Eliya Abbas Sayyed",
-  "url": "https://eliyaabbas.com",
-  "image": "https://eliyaabbas.com/avatar.png",
-  "jobTitle": "Software Engineer @ Innoviscent LPP & AI Solutions Architect",
-  "description": "Specializing in Agentic Workflows, Retrieval-Augmented Generation (RAG), and Decision Intelligence. Building end-to-end production AI pipelines.",
-  "worksFor": {
-    "@type": "Organization",
-    "name": "Innoviscent LPP",
-    "url": "https://innoviscent.com"
-  },
-  "knowsAbout": [
-    "Artificial Intelligence",
-    "Machine Learning",
-    "Generative AI",
-    "Agentic Workflows",
-    "RAG (Retrieval-Augmented Generation)",
-    "Data Analytics",
-    "Decision Intelligence",
-    "Python",
-    "React",
-    "Node.js",
-    "Business Intelligence"
-  ],
-  "sameAs": [
-    "https://github.com/eliyaabbas",
-    "https://www.linkedin.com/in/eliyaa"
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": `${SITE}/#website`,
+      "url": SITE,
+      "name": "Eliya Abbas — Portfolio",
+      "inLanguage": "en",
+      "publisher": { "@id": `${SITE}/#person` }
+    },
+    {
+      "@type": "ProfilePage",
+      "@id": `${SITE}/#profilepage`,
+      "url": SITE,
+      "name": title,
+      "isPartOf": { "@id": `${SITE}/#website` },
+      "about": { "@id": `${SITE}/#person` },
+      "primaryImageOfPage": { "@type": "ImageObject", "url": imageURL, "width": 1200, "height": 630 }
+    },
+    {
+      "@type": "Person",
+      "@id": `${SITE}/#person`,
+      "name": "Eliya Abbas",
+      "url": SITE,
+      "image": `${SITE}/avatar.webp`,
+      "jobTitle": "Software Engineer",
+      "description": "AI Engineer and Data Scientist focused on Generative AI, LLM evaluation and benchmarking (Terminal-Bench, SWE-Bench), machine learning and full-stack AI applications.",
+      "worksFor": { "@type": "Organization", "name": "Innoviscent LLP" },
+      "address": { "@type": "PostalAddress", "addressLocality": "Mumbai", "addressRegion": "Maharashtra", "addressCountry": "IN" },
+      "alumniOf": [
+        { "@type": "CollegeOrUniversity", "name": "M.H. Saboo Siddik College of Engineering" }
+      ],
+      "knowsLanguage": ["English", "Hindi", "Marathi"],
+      "knowsAbout": [
+        "Artificial Intelligence",
+        "Machine Learning",
+        "Generative AI",
+        "LLM Evaluation",
+        "AI Benchmarking",
+        "Prompt Engineering",
+        "Data Science",
+        "Python",
+        "FastAPI",
+        "React",
+        "Node.js",
+        "Tableau",
+        "Power BI",
+        "Business Intelligence"
+      ],
+      "sameAs": [
+        "https://github.com/eliyaabbas",
+        "https://www.linkedin.com/in/eliyaa"
+      ]
+    }
   ]
 };
 ---
@@ -52,32 +83,48 @@ const schema = {
 <html lang="en">
 	<head>
 		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="theme-color" content="#06080d" />
+		<meta name="color-scheme" content="dark light" />
+		<script is:inline>
+			try { var t = localStorage.getItem("theme"); if (t === "light") document.documentElement.setAttribute("data-theme", "light"); } catch (e) {}
+		</script>
 		<link rel="icon" type="image/png" href="/favicon.png" />
 		<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 		<meta name="generator" content={Astro.generator} />
-		
+
         <!-- SEO Metadata -->
 		<title>{title}</title>
 		<meta name="description" content={description} />
-		<meta name="keywords" content="Eliya Abbas Sayyed, AI Solutions Architect, Machine Learning Engineer, Data Analytics Expert, Agentic AI, RAG, GenAI, Decision Intelligence, Software Engineer Mumbai, Innoviscent LPP, Intelihuman.com, The SkyBrisk, Codsoft, Python AI Developer, LLM Integration" />
+		<meta name="author" content="Eliya Abbas" />
+		<meta name="robots" content={noindex ? "noindex, nofollow" : "index, follow, max-image-preview:large, max-snippet:-1"} />
+		<meta name="keywords" content="Eliya Abbas, AI Engineer, Data Scientist, LLM Evaluation, AI Benchmarking, Generative AI, Machine Learning, Python, FastAPI, Software Engineer Mumbai, Innoviscent LLP, AirDawg Labs, Terminal-Bench, SWE-Bench" />
 		<link rel="canonical" href={canonicalURL} />
 
-        <!-- Open Graph / Facebook -->
+        <!-- Open Graph -->
+		<meta property="og:site_name" content="Eliya Abbas — Portfolio" />
+		<meta property="og:locale" content="en_IN" />
 		<meta property="og:title" content={title} />
 		<meta property="og:description" content={description} />
 		<meta property="og:type" content="profile" />
+		<meta property="profile:first_name" content="Eliya" />
+		<meta property="profile:last_name" content="Abbas" />
 		<meta property="og:url" content={canonicalURL} />
-		<meta property="og:image" content={new URL(image, canonicalURL)} />
+		<meta property="og:image" content={imageURL} />
+		<meta property="og:image:width" content="1200" />
+		<meta property="og:image:height" content="630" />
+		<meta property="og:image:alt" content="Eliya Abbas — AI Engineer and Data Scientist" />
 
         <!-- Twitter -->
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={title} />
         <meta name="twitter:description" content={description} />
-        <meta name="twitter:image" content={new URL(image, canonicalURL)} />
+        <meta name="twitter:image" content={imageURL} />
+        <meta name="twitter:image:alt" content="Eliya Abbas — AI Engineer and Data Scientist" />
 
 		<link rel="preconnect" href="https://fonts.googleapis.com">
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link rel="preload" as="image" href="/avatar.webp" type="image/webp" />
 		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 
         <!-- Structured Data -->
