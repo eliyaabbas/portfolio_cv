@@ -17,8 +17,9 @@ const {
   noindex = false
 } = Astro.props;
 
-// Google Tag Manager container ID, e.g. GTM-XXXXXXX (set PUBLIC_GTM_ID in .env or the host's env vars)
-const GTM_ID = import.meta.env.PUBLIC_GTM_ID;
+// Google Tag Manager container ID. Container IDs are public (visible in page source), so a default is safe;
+// set PUBLIC_GTM_ID to override it, or to an empty string to disable tracking.
+const GTM_ID = import.meta.env.PUBLIC_GTM_ID ?? 'GTM-WP7467JR';
 
 const canonicalURL = new URL(Astro.url.pathname, SITE);
 const imageURL = new URL(image, SITE).href;

@@ -36,9 +36,9 @@
   --text-main: var(--text-primary);
   --card-bg: var(--bg-card);
   --card-border: var(--border);
-  --nav-bg: rgba(6,8,13,0.7);
-  --nav-bg-scrolled: rgba(6,8,13,0.92);
-  --nav-bg-mobile: rgba(6,8,13,0.97);
+  --nav-bg: rgba(6,8,13,0.92);
+  --nav-bg-scrolled: rgba(6,8,13,0.97);
+  --nav-bg-mobile: rgba(6,8,13,0.99);
   --overlay-bg: rgba(6,8,13,0.6);
   --chip-bg: rgba(255,255,255,0.05);
   --orb-opacity: 1;
@@ -66,9 +66,9 @@
   --gradient-card: linear-gradient(135deg, #ffffff 0%, #f1f3fa 100%);
   --shadow-glow: 0 4px 30px rgba(109, 40, 217, 0.10);
   --shadow-card: 0 4px 24px rgba(20,30,60,0.08);
-  --nav-bg: rgba(246,247,251,0.75);
-  --nav-bg-scrolled: rgba(246,247,251,0.95);
-  --nav-bg-mobile: rgba(246,247,251,0.98);
+  --nav-bg: rgba(246,247,251,0.94);
+  --nav-bg-scrolled: rgba(246,247,251,0.98);
+  --nav-bg-mobile: rgba(246,247,251,0.99);
   --overlay-bg: rgba(246,247,251,0.7);
   --chip-bg: rgba(19,24,38,0.06);
   --orb-opacity: 0.35;
@@ -120,7 +120,7 @@ body::before {
   filter: blur(70px);
 }
 @media (min-width: 900px) {
-  .bg-orbs .orb { filter: blur(100px); animation: orbFloat 20s ease-in-out infinite; }
+  .bg-orbs .orb { filter: blur(100px); animation: orbFloat 20s ease-in-out infinite; will-change: transform; }
 }
 .bg-orbs .orb:nth-child(1) {
   width: min(600px, 90vw); height: min(600px, 90vw);
@@ -162,8 +162,6 @@ body::before {
   z-index: 1000;
   padding: 0 var(--gutter);
   background: var(--nav-bg);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
   border-bottom: 1px solid var(--border);
   transition: var(--transition);
 }
@@ -201,8 +199,6 @@ body::before {
   gap: var(--space-1);
   background: var(--nav-bg-mobile);
   border-bottom: 1px solid var(--border);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
   max-height: calc(100svh - var(--nav-h));
   overflow-y: auto;
 }
@@ -445,6 +441,9 @@ body::before {
   position: relative;
   z-index: 1;
   padding: var(--section-y) var(--gutter);
+  /* skip layout/paint of off-screen sections until they approach the viewport */
+  content-visibility: auto;
+  contain-intrinsic-size: auto 900px;
 }
 .section-inner { max-width: 1200px; margin: 0 auto; }
 .section-label {
@@ -830,8 +829,6 @@ body::before {
     gap: var(--space-4);
     background: none;
     border: none;
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
     max-height: none;
     overflow: visible;
   }

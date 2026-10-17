@@ -61,7 +61,17 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
   anchor.addEventListener('click', function (e) {
     e.preventDefault();
     const target = document.querySelector(this.getAttribute('href'));
-    if (target) target.scrollIntoView({ behavior: 'smooth' });
+    if (!target) return;
+    // The page is ~10,000px tall: smooth-scrolling across it takes seconds. Jump for long distances, glide for short ones.
+    const far = Math.abs(target.getBoundingClientRect().top) > window.innerHeight * 1.5;
+    if (far) {
+      target.querySelectorAll('.reveal').forEach((el) => el.classList.add('visible'));
+      target.scrollIntoView({ behavior: 'instant' });
+      // sections far from the viewport use estimated heights; re-align once real layout is known
+      requestAnimationFrame(() => requestAnimationFrame(() => target.scrollIntoView({ behavior: 'instant' })));
+    } else {
+      target.scrollIntoView({ behavior: 'smooth' });
+    }
   });
 });
 
