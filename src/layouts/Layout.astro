@@ -24,6 +24,8 @@ const GTM_ID = import.meta.env.PUBLIC_GTM_ID ?? 'GTM-WP7467JR';
 // Google Analytics 4 measurement ID (public by design). Override with PUBLIC_GA_ID, or set it empty to disable.
 const GA_ID = import.meta.env.PUBLIC_GA_ID ?? 'G-R898DWV0QS';
 
+const isHome = Astro.url.pathname === '/';
+
 const canonicalURL = new URL(Astro.url.pathname, SITE);
 const imageURL = new URL(image, SITE).href;
 
@@ -37,15 +39,6 @@ const schema = {
       "name": "Eliya Abbas — Portfolio",
       "inLanguage": "en",
       "publisher": { "@id": `${SITE}/#person` }
-    },
-    {
-      "@type": "ProfilePage",
-      "@id": `${SITE}/#profilepage`,
-      "url": SITE,
-      "name": title,
-      "isPartOf": { "@id": `${SITE}/#website` },
-      "about": { "@id": `${SITE}/#person` },
-      "primaryImageOfPage": { "@type": "ImageObject", "url": imageURL, "width": 1200, "height": 630 }
     },
     {
       "@type": "Person",
@@ -84,6 +77,17 @@ const schema = {
     }
   ]
 };
+if (isHome) {
+  schema["@graph"].splice(1, 0, {
+    "@type": "ProfilePage",
+    "@id": `${SITE}/#profilepage`,
+    "url": SITE,
+    "name": title,
+    "isPartOf": { "@id": `${SITE}/#website` },
+    "about": { "@id": `${SITE}/#person` },
+    "primaryImageOfPage": { "@type": "ImageObject", "url": imageURL, "width": 1200, "height": 630 }
+  });
+}
 ---
 
 <!doctype html>
@@ -114,7 +118,7 @@ const schema = {
 		<meta property="og:locale" content="en_IN" />
 		<meta property="og:title" content={title} />
 		<meta property="og:description" content={description} />
-		<meta property="og:type" content="profile" />
+		<meta property="og:type" content={isHome ? "profile" : "website"} />
 		<meta property="profile:first_name" content="Eliya" />
 		<meta property="profile:last_name" content="Abbas" />
 		<meta property="og:url" content={canonicalURL} />
