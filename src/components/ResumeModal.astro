@@ -8,8 +8,8 @@ import { Icon } from 'astro-icon/components';
       <h3>Resume — Eliya Abbas</h3>
       <div class="resume-actions">
         <button class="btn btn-outline tool" type="button" id="resume-theme" aria-pressed="true" title="Toggle dark mode"><Icon name="lucide:moon" size={16} /> <span id="resume-theme-label">Dark</span></button>
-        <a class="btn btn-primary" href="/Profile.pdf" download="Eliya_Abbas_Resume.pdf"><Icon name="lucide:download" size={16} /> Download</a>
-        <a class="btn btn-outline" href="/Profile.pdf" target="_blank" rel="noopener"><Icon name="lucide:external-link" size={16} /> Open in tab</a>
+        <a class="btn btn-primary" href="/Eliya_Abbas_Resume.pdf" download="Eliya_Abbas_Resume.pdf"><Icon name="lucide:download" size={16} /> Download</a>
+        <a class="btn btn-outline" href="/Eliya_Abbas_Resume.pdf" target="_blank" rel="noopener"><Icon name="lucide:external-link" size={16} /> Open in tab</a>
         <button class="resume-close" type="button" aria-label="Close resume" data-resume-close><Icon name="lucide:x" size={20} /></button>
       </div>
     </div>
@@ -70,7 +70,7 @@ import { Icon } from 'astro-icon/components';
 </style>
 
 <script>
-  const PDF_URL = '/Profile.pdf';
+  const PDF_URL = '/Eliya_Abbas_Resume.pdf';
   const PDFJS = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
   const PDFJS_WORKER = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 

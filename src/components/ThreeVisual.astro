@@ -3,10 +3,12 @@
 <div id="three-container" class="three-container"></div>
 
 <script>
-  import * as THREE from 'three';
-
   const container = document.getElementById('three-container');
-  if (container) {
+
+  // Three.js is ~480 KB, so it loads after the page is interactive and not at all for reduced-motion users.
+  async function startVisual() {
+    const THREE = await import('three');
+    if (container) {
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
     const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
@@ -16,7 +18,7 @@
     container.appendChild(renderer.domElement);
 
     // Create a particle sphere
-    const particlesCount = 2000;
+    const particlesCount = window.innerWidth < 700 ? 900 : 2000;
     const positions = new Float32Array(particlesCount * 3);
     const colors = new Float32Array(particlesCount * 3);
     
@@ -75,8 +77,13 @@
       mouseY = -(e.clientY / window.innerHeight) * 2 + 1;
     });
 
+    // Skip rendering while the hero is off-screen or the tab is hidden
+    let inView = true;
+    new IntersectionObserver(([e]) => { inView = e.isIntersecting; }).observe(container);
+
     function animate() {
       requestAnimationFrame(animate);
+      if (!inView || document.hidden) return;
 
       points.rotation.y += 0.002;
       points.rotation.x += 0.001;
@@ -96,6 +103,13 @@
       camera.updateProjectionMatrix();
       renderer.setSize(container.clientWidth, container.clientHeight);
     });
+  }
+  }
+
+  if (container && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    const schedule = () => ('requestIdleCallback' in window ? requestIdleCallback(startVisual, { timeout: 2500 }) : setTimeout(startVisual, 1200));
+    if (document.readyState === 'complete') schedule();
+    else window.addEventListener('load', schedule, { once: true });
   }
 </script>
 
