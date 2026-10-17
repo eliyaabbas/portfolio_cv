@@ -1,0 +1,123 @@
+---
+import { Icon } from 'astro-icon/components';
+
+// Answers are written in the third person and only state facts from the resume / LinkedIn profile.
+// `a` is plain text (used for the FAQPage structured data); `html` is an optional richer version for the page.
+const faqs = [
+  {
+    q: "Who is Eliya Abbas?",
+    a: "Eliya Abbas is an AI Engineer and Data Scientist based in Mumbai, India, with approximately 2 years of experience in data analytics, Python, business intelligence and AI-driven application development. Eliya currently works as a Software Engineer at Innoviscent LLP."
+  },
+  {
+    q: "What experience does Eliya have in LLM evaluation and AI benchmarking?",
+    a: "As an AI Systems Evaluation Intern at AirDawg Labs (Coudal AI), Eliya evaluated LLM-generated code and responses for correctness and consistency, created and reviewed test cases, worked with the Terminal-Bench and SWE-Bench benchmarks, debugged execution failures, and ran prompt-based evaluations and model comparisons in Docker, Linux, Git and WSL environments."
+  },
+  {
+    q: "What are Eliya's main technical skills?",
+    a: "AI and LLMs: Generative AI, LLM evaluation, AI benchmarking, prompt engineering and machine learning. Programming and backend: Python, SQL, FastAPI, REST APIs, JavaScript, React, Node.js, Express and MongoDB. Data and analytics: Pandas, Power BI, Tableau and Excel. Tools: Docker, Linux, Git and WSL."
+  },
+  {
+    q: "What kind of projects has Eliya built?",
+    a: "The portfolio lists 19 projects and 5 Tableau dashboards, including a DeFi credit scoring model using KMeans on Aave V2 wallets, a Telco customer churn model with 0.842 ROC-AUC, an NLP movie recommender deployed on Streamlit, a flight delay prediction model, and a full-stack QR digital menu platform built with Node.js and MongoDB."
+  },
+  {
+    q: "Does Eliya have data analytics and business intelligence experience?",
+    a: "Yes. Eliya delivered 100+ interactive Tableau dashboards for a US-based HR and recruitment client covering hiring KPIs, attrition, time-to-fill and headcount planning, and built IBM HR Analytics dashboards in both Power BI and Tableau. Eliya also worked as a Data Science Intern at The SkyBrisk using Python and SQL."
+  },
+  {
+    q: "Can Eliya build full-stack and backend applications?",
+    a: "Yes. Eliya built a backend with FastAPI, MongoDB and JWT authentication as a freelance developer, and has built web applications with React, Node.js, Express and MongoDB, including an AI-assisted portfolio chatbot and a QR-based digital menu platform."
+  },
+  {
+    q: "What is Eliya's educational background?",
+    a: "Eliya holds a Bachelor of Engineering in Computer Science Engineering (AI & ML) from M.H. Saboo Siddik College of Engineering, Mumbai (2020 to 2024), and a Diploma in Computer Science (2016 to 2019). Certifications include Google Cloud (data, ML and AI foundations, infrastructure, cloud computing fundamentals and networking) and AWS Academy Cloud Foundations."
+  },
+  {
+    q: "Is Eliya open to new opportunities?",
+    a: "Yes. Eliya is open to opportunities in AI/ML engineering, LLM evaluation, generative AI, data science and AI systems development, and is based in Mumbai, Maharashtra, India."
+  },
+  {
+    q: "Which languages does Eliya speak?",
+    a: "English (full professional proficiency), Hindi (native or bilingual) and Marathi (professional working proficiency)."
+  },
+  {
+    q: "How can I contact Eliya or get the resume?",
+    a: "Email eliyaasayed@gmail.com, connect on LinkedIn at linkedin.com/in/eliyaa, or view and download the resume from this website.",
+    html: 'Email <a href="mailto:eliyaasayed@gmail.com">eliyaasayed@gmail.com</a>, connect on <a href="https://www.linkedin.com/in/eliyaa" target="_blank" rel="noopener noreferrer">LinkedIn</a>, or <a href="/Eliya_Abbas_Resume.pdf" data-resume-open>view and download the resume</a>.'
+  }
+];
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": faqs.map((f) => ({
+    "@type": "Question",
+    "name": f.q,
+    "acceptedAnswer": { "@type": "Answer", "text": f.a }
+  }))
+};
+---
+<section class="section" id="faq">
+  <div class="section-inner">
+    <span class="section-label">Quick Answers</span>
+    <h2 class="section-title reveal">Frequently Asked Questions</h2>
+    <p class="section-desc reveal">Common questions about my background, skills and availability.</p>
+
+    <div class="faq-list">
+      {faqs.map((f, i) => (
+        <details class="faq-item reveal" open={i === 0}>
+          <summary>
+            <span>{f.q}</span>
+            <Icon name="lucide:chevron-down" size={20} />
+          </summary>
+          {f.html ? <p set:html={f.html} /> : <p>{f.a}</p>}
+        </details>
+      ))}
+    </div>
+  </div>
+</section>
+
+<script type="application/ld+json" is:inline set:html={JSON.stringify(faqSchema)} />
+
+<style>
+  .faq-list {
+    display: grid;
+    gap: var(--space-2);
+    max-width: 820px;
+  }
+  .faq-item {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    transition: var(--transition);
+  }
+  .faq-item[open] { border-color: var(--accent-purple); }
+  summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-2);
+    min-height: 56px;
+    padding: var(--space-2) var(--space-3);
+    font-weight: 600;
+    font-size: 1rem;
+    line-height: 1.4;
+    cursor: pointer;
+    list-style: none;
+  }
+  summary::-webkit-details-marker { display: none; }
+  summary :global(svg) {
+    flex-shrink: 0;
+    color: var(--accent-cyan);
+    transition: transform 0.25s ease;
+  }
+  .faq-item[open] summary :global(svg) { transform: rotate(180deg); }
+  .faq-item p {
+    padding: 0 var(--space-3) var(--space-3);
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    line-height: 1.7;
+  }
+  .faq-item p :global(a) { color: var(--accent-cyan); text-decoration: underline; text-underline-offset: 3px; }
+  summary:focus-visible { outline: 2px solid var(--accent-cyan); outline-offset: -2px; border-radius: var(--radius-sm); }
+</style>

@@ -270,6 +270,21 @@ body::before {
 :root[data-theme="light"] .theme-toggle .icon-sun { display: inline-flex; }
 :root[data-theme="light"] .theme-toggle .icon-moon { display: none; }
 
+/* resume pill in the nav */
+.nav-links a.nav-resume {
+  color: var(--accent-cyan);
+  font-weight: 600;
+}
+@media (min-width: 900px) {
+  .nav-links a.nav-resume {
+    padding: 0.4rem 1rem;
+    border: 1px solid var(--accent-cyan);
+    border-radius: 100px;
+  }
+  .nav-links a.nav-resume::after { display: none; }
+  .nav-links a.nav-resume:hover { background: rgba(0, 212, 255, 0.1); }
+}
+
 /* ===== BUTTONS ===== */
 .btn {
   display: inline-flex;
