@@ -21,6 +21,9 @@ const {
 // set PUBLIC_GTM_ID to override it, or to an empty string to disable tracking.
 const GTM_ID = import.meta.env.PUBLIC_GTM_ID ?? 'GTM-WP7467JR';
 
+// Google Analytics 4 measurement ID (public by design). Override with PUBLIC_GA_ID, or set it empty to disable.
+const GA_ID = import.meta.env.PUBLIC_GA_ID ?? 'G-R898DWV0QS';
+
 const canonicalURL = new URL(Astro.url.pathname, SITE);
 const imageURL = new URL(image, SITE).href;
 
@@ -133,6 +136,22 @@ const schema = {
 		<!-- Non-blocking font stylesheet: system fonts render first, web fonts swap in -->
 		<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" onload="this.onload=null;this.rel='stylesheet'" />
 		<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" /></noscript>
+
+		{GA_ID && (
+			<script is:inline define:vars={{ GA_ID }}>
+				// Google tag (gtag.js): same commands as Google's snippet, with the library loaded after page load for speed
+				window.dataLayer = window.dataLayer || [];
+				function gtag() { dataLayer.push(arguments); }
+				gtag('js', new Date());
+				gtag('config', GA_ID);
+				window.addEventListener('load', function () {
+					var s = document.createElement('script');
+					s.async = true;
+					s.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA_ID;
+					document.head.appendChild(s);
+				});
+			</script>
+		)}
 
 		{GTM_ID && (
 			<script is:inline define:vars={{ GTM_ID }}>

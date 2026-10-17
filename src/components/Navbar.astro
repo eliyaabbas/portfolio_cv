@@ -14,8 +14,10 @@ import { Icon } from 'astro-icon/components';
       <li><a href="#tableau">Dashboards</a></li>
       <li><a href="#education">Education</a></li>
       <li><a href="#contact">Contact</a></li>
-      <li><a href="/Eliya_Abbas_Resume.pdf" class="nav-resume" data-resume-open>Resume</a></li>
     </ul>
+    <a href="/Eliya_Abbas_Resume.pdf" class="btn btn-primary nav-cta" data-resume-open>
+      <Icon name="lucide:file-text" size={16} /> <span>Resume</span>
+    </a>
     <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle light and dark theme" title="Toggle theme">
       <span class="icon-moon"><Icon name="lucide:moon" size={18} /></span>
       <span class="icon-sun"><Icon name="lucide:sun" size={18} /></span>

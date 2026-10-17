@@ -253,7 +253,7 @@ body::before {
   align-items: center;
   justify-content: center;
   width: 40px; height: 40px;
-  margin-left: auto;
+  margin-left: 0;
   margin-right: var(--space-1);
   border-radius: 50%;
   background: var(--bg-card);
@@ -266,22 +266,17 @@ body::before {
 :root[data-theme="light"] .theme-toggle .icon-sun { display: inline-flex; }
 :root[data-theme="light"] .theme-toggle .icon-moon { display: none; }
 
-/* resume pill in the nav */
-.nav-links a.nav-resume {
-  color: var(--accent-cyan);
-  font-weight: 600;
-}
-@media (min-width: 900px) {
-  .nav-links a.nav-resume {
-    padding: 0.4rem 1rem;
-    border: 1px solid var(--accent-cyan);
-    border-radius: 100px;
-  }
-  .nav-links a.nav-resume::after { display: none; }
-  .nav-links a.nav-resume:hover { background: rgba(0, 212, 255, 0.1); }
+/* ===== BUTTONS ===== */
+/* compact resume button in the navbar: same look as .btn-primary, scaled to fit the header */
+.nav-cta {
+  margin-left: auto;
+  margin-right: var(--space-1);
+  min-height: 40px;
+  padding: 0.45rem 1rem;
+  font-size: 0.85rem;
+  border-radius: 10px;
 }
 
-/* ===== BUTTONS ===== */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -827,6 +822,7 @@ body::before {
     position: static;
     padding: 0;
     gap: var(--space-4);
+    margin-left: auto;
     background: none;
     border: none;
     max-height: none;
@@ -835,7 +831,8 @@ body::before {
   .nav-links a { padding: 0; font-size: 0.88rem; }
   .nav-links a::after { bottom: -4px; }
   .hamburger { display: none; }
-  .theme-toggle { margin-left: var(--space-3); margin-right: 0; }
+  .nav-cta { margin-left: var(--space-3); margin-right: var(--space-1); }
+  .theme-toggle { margin-left: 0; margin-right: 0; }
 
   .hero-inner { grid-template-columns: 1fr 1fr; gap: var(--space-6); text-align: left; }
   .hero-visual { order: 0; }

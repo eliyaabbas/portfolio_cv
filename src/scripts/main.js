@@ -149,11 +149,12 @@ window.addEventListener('scroll', () => {
   btn?.addEventListener('click', () => apply(root.getAttribute('data-theme') !== 'light'));
 })();
 
-// ===== ANALYTICS (Google Tag Manager dataLayer events) =====
-// Events are harmless when GTM isn't installed. In GTM, create GA4 Event tags triggered by these custom events.
+// ===== ANALYTICS (GA4 events via the Google tag) =====
+// Sent with gtag('event', ...) so they reach GA4 directly. Harmless if the tag isn't installed.
 (function () {
   window.dataLayer = window.dataLayer || [];
-  const track = (event, params = {}) => window.dataLayer.push({ event, ...params });
+  window.gtag = window.gtag || function () { window.dataLayer.push(arguments); };
+  const track = (event, params = {}) => window.gtag('event', event, params);
 
   // clicks: resume, contact, social, project links, filters, theme
   document.addEventListener('click', (e) => {
