@@ -12,7 +12,7 @@ const SITE = "https://eliyaasayyed.works";
 
 const {
   title = "Eliya Abbas | AI Engineer, Data Scientist & LLM Evaluation",
-  description = "Portfolio of Eliya Abbas — AI Engineer and Data Scientist specializing in Generative AI, LLM Evaluation and Benchmarking, Machine Learning, and Python/FastAPI systems. Software Engineer at Innoviscent LLP, Mumbai.",
+  description = "Portfolio of Eliya Abbas — AI Engineer and Data Scientist specializing in Generative AI, LLM Evaluation and Benchmarking, Machine Learning, and Python/FastAPI systems. Based in Mumbai.",
   image = "/og-image.jpg",
   noindex = false
 } = Astro.props;
@@ -46,9 +46,7 @@ const schema = {
       "name": "Eliya Abbas",
       "url": SITE,
       "image": `${SITE}/avatar.webp`,
-      "jobTitle": "Software Engineer",
       "description": "AI Engineer and Data Scientist focused on Generative AI, LLM evaluation and benchmarking (Terminal-Bench, SWE-Bench), machine learning and full-stack AI applications.",
-      "worksFor": { "@type": "Organization", "name": "Innoviscent LLP" },
       "address": { "@type": "PostalAddress", "addressLocality": "Mumbai", "addressRegion": "Maharashtra", "addressCountry": "IN" },
       "alumniOf": [
         { "@type": "CollegeOrUniversity", "name": "M.H. Saboo Siddik College of Engineering" }
@@ -95,6 +93,25 @@ if (isHome) {
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+		<!-- Google tag (gtag.js) and Google Tag Manager: Google's standard snippets, as high in <head> as possible -->
+		{GA_ID && <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}></script>}
+		{GA_ID && (
+			<script is:inline set:html={`
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', '${GA_ID}');
+`} />
+		)}
+		{GTM_ID && (
+			<script is:inline set:html={`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','${GTM_ID}');`} />
+		)}
 		<meta name="theme-color" content="#06080d" />
 		<meta name="color-scheme" content="dark light" />
 		<script is:inline>
@@ -109,7 +126,7 @@ if (isHome) {
 		<meta name="description" content={description} />
 		<meta name="author" content="Eliya Abbas" />
 		<meta name="robots" content={noindex ? "noindex, nofollow" : "index, follow, max-image-preview:large, max-snippet:-1"} />
-		<meta name="keywords" content="Eliya Abbas, AI Engineer, Data Scientist, LLM Evaluation, AI Benchmarking, Generative AI, Machine Learning, Python, FastAPI, Software Engineer Mumbai, Innoviscent LLP, AirDawg Labs, Terminal-Bench, SWE-Bench" />
+		<meta name="keywords" content="Eliya Abbas, AI Engineer, Data Scientist, LLM Evaluation, AI Benchmarking, Generative AI, Machine Learning, Python, FastAPI, Software Engineer Mumbai,AirDawg Labs, Terminal-Bench, SWE-Bench" />
 		<link rel="canonical" href={canonicalURL} />
 		<link rel="alternate" type="application/pdf" href="/Eliya_Abbas_Resume.pdf" title="Eliya Abbas — Resume (PDF)" />
 
@@ -140,36 +157,6 @@ if (isHome) {
 		<!-- Non-blocking font stylesheet: system fonts render first, web fonts swap in -->
 		<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" onload="this.onload=null;this.rel='stylesheet'" />
 		<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" /></noscript>
-
-		{GA_ID && (
-			<script is:inline define:vars={{ GA_ID }}>
-				// Google tag (gtag.js): same commands as Google's snippet, with the library loaded after page load for speed
-				window.dataLayer = window.dataLayer || [];
-				function gtag() { dataLayer.push(arguments); }
-				gtag('js', new Date());
-				gtag('config', GA_ID);
-				window.addEventListener('load', function () {
-					var s = document.createElement('script');
-					s.async = true;
-					s.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA_ID;
-					document.head.appendChild(s);
-				});
-			</script>
-		)}
-
-		{GTM_ID && (
-			<script is:inline define:vars={{ GTM_ID }}>
-				window.dataLayer = window.dataLayer || [];
-				window.dataLayer.push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
-				// load GTM after the page has loaded so it never competes with first paint
-				window.addEventListener('load', function () {
-					var s = document.createElement('script');
-					s.async = true;
-					s.src = 'https://www.googletagmanager.com/gtm.js?id=' + GTM_ID;
-					document.head.appendChild(s);
-				});
-			</script>
-		)}
 
         <!-- Structured Data -->
         <script type="application/ld+json" is:inline set:html={JSON.stringify(schema)} />
