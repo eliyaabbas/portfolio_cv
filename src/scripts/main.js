@@ -138,3 +138,57 @@ window.addEventListener('scroll', () => {
   if (meta && root.getAttribute('data-theme') === 'light') meta.setAttribute('content', '#f6f7fb');
   btn?.addEventListener('click', () => apply(root.getAttribute('data-theme') !== 'light'));
 })();
+
+// ===== ANALYTICS (Google Tag Manager dataLayer events) =====
+// Events are harmless when GTM isn't installed. In GTM, create GA4 Event tags triggered by these custom events.
+(function () {
+  window.dataLayer = window.dataLayer || [];
+  const track = (event, params = {}) => window.dataLayer.push({ event, ...params });
+
+  // clicks: resume, contact, social, project links, filters, theme
+  document.addEventListener('click', (e) => {
+    const el = e.target.closest('a, button');
+    if (!el) return;
+    const href = el.getAttribute('href') || '';
+
+    if (el.hasAttribute('data-resume-open')) {
+      const where = el.closest('.hero-cta') ? 'hero' : el.closest('.navbar') ? 'navbar' : el.closest('.footer') ? 'footer' : el.closest('#faq') ? 'faq' : 'other';
+      return track('resume_open', { location: where });
+    }
+    if (el.matches('.resume-actions a[download]')) return track('resume_download', { file_name: 'Eliya_Abbas_Resume.pdf' });
+    if (el.matches('.resume-actions a[target="_blank"]')) return track('resume_open_tab');
+    if (href.startsWith('mailto:')) return track('contact_email');
+    if (href.includes('linkedin.com')) return track('social_click', { network: 'linkedin' });
+    if (href.includes('github.com') && !el.closest('.project-card')) return track('social_click', { network: 'github' });
+    if (el.closest('.project-card') && el.tagName === 'A') {
+      return track('project_click', { project_name: el.closest('.project-card').querySelector('h3')?.textContent.trim() });
+    }
+    if (el.closest('.tableau-card') && el.tagName === 'A') {
+      return track('dashboard_click', { dashboard_name: el.closest('.tableau-card').querySelector('h3')?.textContent.trim() });
+    }
+    if (el.matches('.filter-chip')) return track('project_filter', { filter: el.dataset.filter });
+    if (el.id === 'themeToggle') {
+      return track('theme_toggle', { theme: document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark' });
+    }
+    if (el.id === 'marker-toggle') return track('resume_marker_toggle');
+  });
+
+  // FAQ opened (the toggle event doesn't bubble, so capture it)
+  document.addEventListener('toggle', (e) => {
+    if (e.target.matches?.('.faq-item') && e.target.open) {
+      track('faq_open', { question: e.target.querySelector('summary span')?.textContent.trim() });
+    }
+  }, true);
+
+  // each section seen once
+  const seen = new Set();
+  const sectionObserver = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting && !seen.has(entry.target.id)) {
+        seen.add(entry.target.id);
+        track('section_view', { section: entry.target.id });
+      }
+    });
+  }, { threshold: 0.4 });
+  document.querySelectorAll('section[id]').forEach((s) => sectionObserver.observe(s));
+})();

@@ -17,6 +17,9 @@ const {
   noindex = false
 } = Astro.props;
 
+// Google Tag Manager container ID, e.g. GTM-XXXXXXX (set PUBLIC_GTM_ID in .env or the host's env vars)
+const GTM_ID = import.meta.env.PUBLIC_GTM_ID;
+
 const canonicalURL = new URL(Astro.url.pathname, SITE);
 const imageURL = new URL(image, SITE).href;
 
@@ -130,10 +133,27 @@ const schema = {
 		<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" onload="this.onload=null;this.rel='stylesheet'" />
 		<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" /></noscript>
 
+		{GTM_ID && (
+			<script is:inline define:vars={{ GTM_ID }}>
+				window.dataLayer = window.dataLayer || [];
+				window.dataLayer.push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
+				// load GTM after the page has loaded so it never competes with first paint
+				window.addEventListener('load', function () {
+					var s = document.createElement('script');
+					s.async = true;
+					s.src = 'https://www.googletagmanager.com/gtm.js?id=' + GTM_ID;
+					document.head.appendChild(s);
+				});
+			</script>
+		)}
+
         <!-- Structured Data -->
         <script type="application/ld+json" is:inline set:html={JSON.stringify(schema)} />
 	</head>
 	<body>
+		{GTM_ID && (
+			<noscript><iframe src={`https://www.googletagmanager.com/ns.html?id=${GTM_ID}`} height="0" width="0" style="display:none;visibility:hidden" title="Google Tag Manager"></iframe></noscript>
+		)}
 		<div class="bg-orbs">
 			<div class="orb"></div>
 			<div class="orb"></div>
