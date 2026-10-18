@@ -1,0 +1,335 @@
+---
+import { Icon } from 'astro-icon/components';
+
+// The chat backend: Supabase Edge Functions in the PortfolioAI repo (github.com/eliyaabbas/PortfolioAI).
+// The URL is public by design; override it with PUBLIC_CHAT_API_BASE.
+const API_BASE = import.meta.env.PUBLIC_CHAT_API_BASE ?? 'https://ckwxzrjxiudnymcvymjr.supabase.co/functions/v1';
+
+const SUGGESTIONS = [
+  "What are Eliya's top skills?",
+  "Tell me about his LLM evaluation work",
+  "Why should I hire Eliya?",
+  "Which projects is he proudest of?",
+];
+---
+<div class="ai-chat-root" id="ai-chat" data-api-base={API_BASE}>
+  <button class="ai-fab" type="button" data-chat-open aria-controls="ai-chat-panel" aria-expanded="false">
+    <Icon name="lucide:sparkles" size={18} /> <span>Ask my AI</span>
+  </button>
+
+  <section class="ai-panel" id="ai-chat-panel" role="dialog" aria-labelledby="ai-chat-title" hidden>
+    <header class="ai-head">
+      <div class="ai-head-text">
+        <h2 id="ai-chat-title"><span class="ai-dot" aria-hidden="true"></span> Ask my AI</h2>
+        <p>Answers from Eliya's portfolio · <span id="ai-remaining">5 questions</span></p>
+      </div>
+      <button class="ai-icon-btn" type="button" data-chat-close title="Close chat" aria-label="Close chat"><Icon name="lucide:x" size={18} /></button>
+    </header>
+
+    <div class="ai-messages" id="ai-messages" aria-live="polite">
+      <div class="ai-msg ai-msg--bot">
+        <p>Hi! 👋 I'm <strong>Eliya's AI assistant</strong>. Ask me anything about his experience, projects or skills.</p>
+      </div>
+      <div class="ai-chips" id="ai-chips">
+        {SUGGESTIONS.map((q) => <button type="button" class="ai-chip" data-question={q}>{q}</button>)}
+      </div>
+    </div>
+
+    <form class="ai-form" id="ai-form">
+      <label for="ai-input" class="sr-only">Your question</label>
+      <input id="ai-input" type="text" maxlength="500" autocomplete="off" placeholder="Ask about Eliya's work…" />
+      <button class="ai-send" type="submit" aria-label="Send" disabled><Icon name="lucide:send" size={18} /></button>
+    </form>
+    <p class="ai-disclaimer">AI answers can be imperfect. Conversations are saved to improve the assistant.</p>
+
+    <template id="ai-feedback-tpl">
+      <div class="ai-feedback">
+        <button type="button" class="ai-fb" data-rating="up" aria-label="Helpful" aria-pressed="false"><Icon name="lucide:thumbs-up" size={14} /></button>
+        <button type="button" class="ai-fb" data-rating="down" aria-label="Not helpful" aria-pressed="false"><Icon name="lucide:thumbs-down" size={14} /></button>
+      </div>
+    </template>
+  </section>
+</div>
+
+<style>
+  .ai-fab {
+    position: fixed; right: max(1rem, env(safe-area-inset-right)); bottom: max(1rem, env(safe-area-inset-bottom)); z-index: 9000;
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    padding: 0.8rem 1.15rem; border: 0; border-radius: 999px; cursor: pointer;
+    font: 600 0.92rem/1 'Inter', system-ui, sans-serif; color: #fff;
+    background: linear-gradient(135deg, var(--accent-purple), #00a3cc);
+    box-shadow: 0 8px 30px rgba(124, 58, 237, 0.45);
+    transition: transform var(--transition), box-shadow var(--transition), opacity var(--transition);
+  }
+  .ai-fab:hover { transform: translateY(-2px); box-shadow: 0 12px 36px rgba(124, 58, 237, 0.55); }
+  .ai-fab:focus-visible { outline: 2px solid var(--accent-cyan); outline-offset: 3px; }
+  .ai-chat-root.is-open .ai-fab { opacity: 0; pointer-events: none; transform: translateY(8px); }
+
+  .ai-panel {
+    position: fixed; right: max(1rem, env(safe-area-inset-right)); bottom: max(1rem, env(safe-area-inset-bottom)); z-index: 9001;
+    width: min(400px, calc(100vw - 2rem)); height: min(600px, calc(100vh - 2rem)); height: min(600px, calc(100svh - 2rem));
+    display: flex; flex-direction: column; overflow: hidden;
+    background: var(--bg-card); color: var(--text-primary);
+    border: 1px solid var(--border); border-radius: var(--radius);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45), var(--shadow-glow);
+    animation: ai-in 0.22s ease;
+  }
+  .ai-panel[hidden] { display: none; }
+  @keyframes ai-in { from { opacity: 0; transform: translateY(12px) scale(0.98); } to { opacity: 1; transform: none; } }
+
+  .ai-head { display: flex; align-items: center; gap: 0.25rem; padding: 0.85rem 0.75rem 0.85rem 1.1rem; border-bottom: 1px solid var(--border); background: var(--bg-secondary); }
+  .ai-head-text { flex: 1; min-width: 0; }
+  .ai-head h2 { display: flex; align-items: center; gap: 0.5rem; font-size: 1rem; font-weight: 700; margin: 0; }
+  .ai-head p { font-size: 0.78rem; color: var(--text-secondary); margin: 0.15rem 0 0; }
+  .ai-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent-green); box-shadow: 0 0 8px var(--accent-green); }
+  .ai-icon-btn { display: flex; padding: 0.45rem; border: 0; border-radius: 8px; background: transparent; color: var(--text-secondary); cursor: pointer; }
+  .ai-icon-btn:hover, .ai-icon-btn:focus-visible { background: var(--chip-bg); color: var(--text-primary); }
+
+  .ai-messages { flex: 1; overflow-y: auto; padding: 1rem; display: flex; flex-direction: column; gap: 0.75rem; overscroll-behavior: contain; }
+  .ai-msg { max-width: 88%; padding: 0.7rem 0.95rem; border-radius: 14px; font-size: 0.9rem; line-height: 1.55; overflow-wrap: anywhere; }
+  .ai-msg--bot { align-self: flex-start; background: var(--bg-secondary); border: 1px solid var(--border); border-bottom-left-radius: 4px; }
+  .ai-msg--user { align-self: flex-end; color: #fff; background: linear-gradient(135deg, var(--accent-purple), #0891b2); border-bottom-right-radius: 4px; }
+  .ai-msg--error { border-color: var(--accent-orange); }
+  .ai-msg :global(p) { margin: 0; }
+  .ai-msg :global(p + p), .ai-msg :global(p + ul), .ai-msg :global(ul + p), .ai-msg :global(p + ol), .ai-msg :global(ol + p) { margin-top: 0.45rem; }
+  .ai-msg :global(ul), .ai-msg :global(ol) { margin: 0.35rem 0 0; padding-left: 1.15rem; }
+  .ai-msg :global(li + li) { margin-top: 0.2rem; }
+  .ai-msg :global(strong) { color: var(--accent-purple-text); font-weight: 600; }
+  .ai-msg--user :global(strong) { color: inherit; }
+  .ai-msg :global(a) { color: var(--accent-cyan); text-underline-offset: 2px; }
+  .ai-msg :global(code) { font-family: 'JetBrains Mono', monospace; font-size: 0.82em; padding: 0.05rem 0.3rem; border-radius: 4px; background: var(--chip-bg); }
+
+  .ai-typing { display: flex; gap: 4px; align-items: center; padding: 0.85rem 1rem; }
+  .ai-typing span { width: 6px; height: 6px; border-radius: 50%; background: var(--text-muted); animation: ai-dot 1.3s infinite; }
+  .ai-typing span:nth-child(2) { animation-delay: 0.15s; }
+  .ai-typing span:nth-child(3) { animation-delay: 0.3s; }
+  @keyframes ai-dot { 0%, 60%, 100% { opacity: 0.35; transform: none; } 30% { opacity: 1; transform: translateY(-4px); } }
+
+  .ai-chips { display: flex; flex-wrap: wrap; gap: 0.45rem; }
+  .ai-chip {
+    padding: 0.45rem 0.8rem; border-radius: 999px; cursor: pointer; text-align: left;
+    font: 500 0.8rem/1.3 'Inter', system-ui, sans-serif; color: var(--text-primary);
+    background: var(--chip-bg); border: 1px solid var(--border); transition: border-color var(--transition), color var(--transition);
+  }
+  .ai-chip:hover, .ai-chip:focus-visible { border-color: var(--accent-cyan); color: var(--accent-cyan); }
+
+  .ai-feedback { display: flex; gap: 0.3rem; margin-top: 0.5rem; }
+  .ai-fb { display: flex; padding: 0.3rem 0.45rem; border-radius: 7px; cursor: pointer; color: var(--text-muted); background: transparent; border: 1px solid var(--border); }
+  .ai-fb:hover:not(:disabled) { color: var(--accent-cyan); border-color: var(--accent-cyan); }
+  .ai-fb[aria-pressed="true"] { color: var(--accent-cyan); border-color: var(--accent-cyan); background: rgba(0, 212, 255, 0.1); }
+  .ai-fb:disabled { cursor: default; }
+  .ai-fb:disabled:not([aria-pressed="true"]) { opacity: 0.4; }
+
+  .ai-form { display: flex; gap: 0.5rem; padding: 0.75rem; border-top: 1px solid var(--border); background: var(--bg-secondary); }
+  .ai-form input {
+    flex: 1; min-width: 0; padding: 0.7rem 0.9rem; border-radius: var(--radius-sm);
+    font: 400 0.9rem 'Inter', system-ui, sans-serif; color: var(--text-primary);
+    background: var(--bg-card); border: 1px solid var(--border); outline: none;
+  }
+  .ai-form input:focus { border-color: var(--accent-cyan); }
+  .ai-form input:disabled { opacity: 0.6; cursor: not-allowed; }
+  .ai-send { display: flex; align-items: center; justify-content: center; width: 42px; border: 0; border-radius: var(--radius-sm); cursor: pointer; color: #fff; background: linear-gradient(135deg, var(--accent-purple), #0891b2); }
+  .ai-send:disabled { opacity: 0.4; cursor: not-allowed; }
+  .ai-disclaimer { padding: 0 0.9rem 0.6rem; font-size: 0.7rem; color: var(--text-muted); background: var(--bg-secondary); }
+
+  @media (max-width: 520px) {
+    .ai-panel { inset: 0; width: 100%; height: 100%; border-radius: 0; border: 0; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .ai-fab, .ai-panel, .ai-typing span { animation: none; transition: none; }
+  }
+</style>
+
+<script>
+  type Rating = 'up' | 'down';
+  interface Msg { role: 'user' | 'bot'; text: string; messageId?: string | null; rating?: Rating | null; error?: boolean }
+  interface State { sessionId: string; messages: Msg[]; remaining: number | null; limitReached: boolean }
+
+  const STORAGE_KEY = 'ai-chat-v1';
+  const root = document.getElementById('ai-chat') as HTMLElement;
+  const apiBase = root.dataset.apiBase!;
+  const panel = document.getElementById('ai-chat-panel') as HTMLElement;
+  const fab = root.querySelector('.ai-fab') as HTMLButtonElement;
+  const list = document.getElementById('ai-messages') as HTMLElement;
+  const chips = document.getElementById('ai-chips') as HTMLElement;
+  const form = document.getElementById('ai-form') as HTMLFormElement;
+  const input = document.getElementById('ai-input') as HTMLInputElement;
+  const send = form.querySelector('.ai-send') as HTMLButtonElement;
+  const remainingEl = document.getElementById('ai-remaining') as HTMLElement;
+  const feedbackTpl = document.getElementById('ai-feedback-tpl') as HTMLTemplateElement;
+  const welcome = list.firstElementChild!.cloneNode(true);
+
+  const track = (event: string, params: Record<string, unknown> = {}) => (window as any).gtag?.('event', event, params);
+  const newSessionId = () => `session_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`;
+
+  // Kept for the tab's lifetime so the chat (and its question limit) carries across pages
+  function load(): State {
+    try {
+      const saved = JSON.parse(sessionStorage.getItem(STORAGE_KEY) || 'null');
+      if (saved?.sessionId) return saved;
+    } catch { /* storage unavailable */ }
+    return { sessionId: newSessionId(), messages: [], remaining: null, limitReached: false };
+  }
+  let state = load();
+  const save = () => { try { sessionStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch { /* ignore */ } };
+  let busy = false;
+  let lastTrigger: HTMLElement | null = null;
+
+  // --- Minimal, safe Markdown: escapes HTML first, then supports **bold**, `code`, links and lists ---
+  const escapeHtml = (s: string) => s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]!));
+  function inline(s: string) {
+    return escapeHtml(s)
+      .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+      .replace(/`([^`]+)`/g, '<code>$1</code>')
+      .replace(/\[([^\]]+)\]\(((?:https?:\/\/|mailto:)[^\s)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>')
+      .replace(/(^|[\s(])((?:https?:\/\/)[^\s<)]+[^\s<).,!?])/g, '$1<a href="$2" target="_blank" rel="noopener noreferrer">$2</a>');
+  }
+  function renderMarkdown(text: string) {
+    const out: string[] = [];
+    let listTag: 'ul' | 'ol' | null = null;
+    const closeList = () => { if (listTag) { out.push(`</${listTag}>`); listTag = null; } };
+    for (const raw of text.split('\n')) {
+      const line = raw.trim();
+      const bullet = line.match(/^[-*•]\s+(.*)$/);
+      const numbered = line.match(/^\d+[.)]\s+(.*)$/);
+      if (bullet || numbered) {
+        const tag = bullet ? 'ul' : 'ol';
+        if (listTag !== tag) { closeList(); out.push(`<${tag}>`); listTag = tag; }
+        out.push(`<li>${inline((bullet || numbered)![1])}</li>`);
+      } else if (line) {
+        closeList();
+        out.push(`<p>${inline(line.replace(/^#{1,6}\s+/, ''))}</p>`);
+      } else {
+        closeList();
+      }
+    }
+    closeList();
+    return out.join('');
+  }
+
+  function scrollToEnd() { list.scrollTop = list.scrollHeight; }
+
+  function renderMessage(msg: Msg, index: number) {
+    const el = document.createElement('div');
+    el.className = `ai-msg ai-msg--${msg.role}${msg.error ? ' ai-msg--error' : ''}`;
+    if (msg.role === 'bot') {
+      el.innerHTML = renderMarkdown(msg.text);
+      if (msg.messageId) {
+        const fb = feedbackTpl.content.firstElementChild!.cloneNode(true) as HTMLElement;
+        fb.querySelectorAll<HTMLButtonElement>('.ai-fb').forEach((b) => {
+          b.setAttribute('aria-pressed', String(msg.rating === b.dataset.rating));
+          b.disabled = Boolean(msg.rating);
+          b.addEventListener('click', () => rate(index, b.dataset.rating as Rating));
+        });
+        el.appendChild(fb);
+      }
+    } else {
+      el.textContent = msg.text;
+    }
+    return el;
+  }
+
+  function renderAll() {
+    list.replaceChildren(welcome.cloneNode(true), ...state.messages.map(renderMessage));
+    if (!state.messages.length) list.appendChild(chips);
+    if (busy) {
+      const typing = document.createElement('div');
+      typing.className = 'ai-msg ai-msg--bot ai-typing';
+      typing.setAttribute('aria-label', 'Assistant is typing');
+      typing.innerHTML = '<span></span><span></span><span></span>';
+      list.appendChild(typing);
+    }
+    const r = state.remaining;
+    remainingEl.textContent = state.limitReached ? 'limit reached' : r === null ? '5 questions' : `${r} question${r === 1 ? '' : 's'} left`;
+    input.disabled = state.limitReached;
+    input.placeholder = state.limitReached ? 'Question limit reached — email Eliya instead' : "Ask about Eliya's work…";
+    send.disabled = busy || state.limitReached || !input.value.trim();
+    scrollToEnd();
+  }
+
+  async function post(path: string, body: unknown) {
+    const res = await fetch(`${apiBase}/${path}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    });
+    return { ok: res.ok, data: await res.json().catch(() => ({})) };
+  }
+
+  async function ask(question: string) {
+    const text = question.trim();
+    if (!text || busy || state.limitReached) return;
+    state.messages.push({ role: 'user', text });
+    busy = true;
+    input.value = '';
+    save();
+    renderAll();
+    track('ai_chat_message', { question_number: state.messages.filter((m) => m.role === 'user').length });
+
+    try {
+      const { data } = await post('chat', { message: text, session_id: state.sessionId });
+      if (typeof data.remaining === 'number') state.remaining = data.remaining;
+      if (data.limit_reached) state.limitReached = true;
+      state.messages.push(data.success
+        ? { role: 'bot', text: data.reply, messageId: data.message_id, rating: null }
+        : { role: 'bot', text: data.error || 'Something went wrong. Please try again.', error: true });
+    } catch {
+      state.messages.push({ role: 'bot', text: "I couldn't reach the server. Please check your connection and try again.", error: true });
+    } finally {
+      busy = false;
+      save();
+      renderAll();
+      input.focus();
+    }
+  }
+
+  async function rate(index: number, rating: Rating) {
+    const msg = state.messages[index];
+    if (!msg?.messageId || msg.rating) return;
+    msg.rating = rating;
+    save();
+    renderAll();
+    track('ai_chat_feedback', { rating });
+    try {
+      const { ok } = await post('feedback', { message_id: msg.messageId, session_id: state.sessionId, rating });
+      if (!ok) throw new Error('feedback failed');
+    } catch {
+      msg.rating = null;
+      save();
+      renderAll();
+    }
+  }
+
+  function open(trigger: HTMLElement | null) {
+    lastTrigger = trigger;
+    panel.hidden = false;
+    root.classList.add('is-open');
+    fab.setAttribute('aria-expanded', 'true');
+    renderAll();
+    input.focus();
+    const where = trigger?.closest('.hero-cta') ? 'hero' : trigger === fab ? 'floating' : 'other';
+    track('ai_chat_open', { location: where });
+  }
+
+  function close() {
+    panel.hidden = true;
+    root.classList.remove('is-open');
+    fab.setAttribute('aria-expanded', 'false');
+    (lastTrigger && document.contains(lastTrigger) ? lastTrigger : fab).focus();
+  }
+
+  document.addEventListener('click', (e) => {
+    const target = e.target as HTMLElement;
+    const opener = target.closest<HTMLElement>('[data-chat-open]');
+    if (opener) { e.preventDefault(); open(opener); return; }
+    if (target.closest('[data-chat-close]')) close();
+  });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !panel.hidden) close(); });
+
+  chips.addEventListener('click', (e) => {
+    const chip = (e.target as HTMLElement).closest<HTMLButtonElement>('.ai-chip');
+    if (chip?.dataset.question) ask(chip.dataset.question);
+  });
+  form.addEventListener('submit', (e) => { e.preventDefault(); ask(input.value); });
+  input.addEventListener('input', () => { send.disabled = busy || state.limitReached || !input.value.trim(); });
+</script>
