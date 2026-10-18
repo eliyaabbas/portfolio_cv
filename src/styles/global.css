@@ -334,9 +334,9 @@ body::before {
   order: -1;
   display: flex;
   justify-content: center;
-  animation: fadeInUp 0.8s ease-out 0.2s both;
+  animation: slideUp 0.8s ease-out 0.2s both;
 }
-.hero-text { animation: fadeInUp 0.8s ease-out; }
+.hero-text { animation: slideUp 0.8s ease-out; }
 .hero-badge {
   display: inline-flex;
   align-items: center;
@@ -790,9 +790,11 @@ body::before {
 .footer-links a:hover { color: var(--accent-cyan); }
 
 /* ===== ANIMATIONS ===== */
-@keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(30px); }
-  to { opacity: 1; transform: translateY(0); }
+/* Hero entrance: motion only. Starting from opacity 0 would hide the avatar/headline (the LCP element)
+   until the animation ran, delaying Largest Contentful Paint. */
+@keyframes slideUp {
+  from { transform: translateY(30px); }
+  to { transform: translateY(0); }
 }
 .reveal {
   opacity: 0;

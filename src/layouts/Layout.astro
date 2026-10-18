@@ -1,6 +1,7 @@
 ---
 import "../styles/global.css";
 import AIChat from "../components/AIChat.astro";
+import { AVATAR_SRCSET, AVATAR_SIZES } from "../data/avatar";
 
 interface Props {
 	title?: string;
@@ -95,23 +96,22 @@ if (isHome) {
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 
-		<!-- Google tag (gtag.js) and Google Tag Manager: Google's standard snippets, as high in <head> as possible -->
-		{GA_ID && <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}></script>}
-		{GA_ID && (
+		<!-- Google tag (gtag.js) and Google Tag Manager. The dataLayer and gtag() stub are set up immediately, so
+		     page views and events are queued from the start; the ~290 KB of Google scripts download after the
+		     page has loaded, so they don't compete with the page's own content for bandwidth on mobile. -->
+		{(GA_ID || GTM_ID) && (
 			<script is:inline set:html={`
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', '${GA_ID}');
+  ${GA_ID ? `gtag('js', new Date());
+  gtag('config', '${GA_ID}');` : ''}
+  ${GTM_ID ? `dataLayer.push({'gtm.start': new Date().getTime(), event: 'gtm.js'});` : ''}
+  window.addEventListener('load', function () {
+    function add(src) { var s = document.createElement('script'); s.async = true; s.src = src; document.head.appendChild(s); }
+    ${GA_ID ? `add('https://www.googletagmanager.com/gtag/js?id=${GA_ID}');` : ''}
+    ${GTM_ID ? `add('https://www.googletagmanager.com/gtm.js?id=${GTM_ID}');` : ''}
+  }, { once: true });
 `} />
-		)}
-		{GTM_ID && (
-			<script is:inline set:html={`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','${GTM_ID}');`} />
 		)}
 		<meta name="theme-color" content="#06080d" />
 		<meta name="color-scheme" content="dark light" />
@@ -154,7 +154,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 		<link rel="preconnect" href="https://fonts.googleapis.com">
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-		<link rel="preload" as="image" href="/avatar.webp" type="image/webp" />
+		{isHome && <link rel="preload" as="image" type="image/webp" imagesrcset={AVATAR_SRCSET} imagesizes={AVATAR_SIZES} fetchpriority="high" />}
 		<!-- Non-blocking font stylesheet: system fonts render first, web fonts swap in -->
 		<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" onload="this.onload=null;this.rel='stylesheet'" />
 		<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" /></noscript>

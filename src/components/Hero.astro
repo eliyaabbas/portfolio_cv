@@ -1,6 +1,7 @@
 ---
 import { Icon } from 'astro-icon/components';
 import ThreeVisual from './ThreeVisual.astro';
+import { AVATAR_SRCSET, AVATAR_SIZES } from '../data/avatar';
 ---
 <section class="hero" id="hero">
   <div class="hero-inner">
@@ -36,7 +37,7 @@ import ThreeVisual from './ThreeVisual.astro';
         <div class="avatar-ring"></div>
         <div class="visual-container">
           <ThreeVisual />
-          <img src="/avatar.webp" alt="Portrait of Eliya Abbas, AI Engineer and Data Scientist" width="1024" height="1024" fetchpriority="high" decoding="async" class="avatar-img-overlay" />
+          <img src="/avatar-400.webp" srcset={AVATAR_SRCSET} sizes={AVATAR_SIZES} alt="Portrait of Eliya Abbas, AI Engineer and Data Scientist" width="1024" height="1024" fetchpriority="high" class="avatar-img-overlay" />
         </div>
       </div>
     </div>
